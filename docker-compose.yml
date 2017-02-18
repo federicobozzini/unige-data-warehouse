@@ -1,0 +1,9 @@
+version: '2'
+services:
+  dwws:
+    image: acrrd/dw-workstation
+    container_name: dwws
+    ports:
+    - "2023:22"
+    volumes:
+    - /d/Workspaces/Projects/university/dw:/home/student/share
