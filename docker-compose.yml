@@ -6,4 +6,4 @@ services:
     ports:
     - "2023:22"
     volumes:
-    - /d/Workspaces/Projects/university/dw:/home/student/share
+    - .:/home/student/share
