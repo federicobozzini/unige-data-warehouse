@@ -154,6 +154,24 @@ Sale[currency, year].revenue
     left join sales.currencyrate c on h.currencyrateid = c.currencyrateid
     group by currency;
 
+#### q6
+
+Quantity of product sent by shipping method for every country
+
+Sale[country, ship-method].quantity
+
+    select country.name as countryname,
+        sm.name as shipmethodname,
+        sum (d.orderqty) as quantity
+    from sales.salesorderheader h
+    left join sales.salesorderdetail d on h.salesorderid = d.salesorderid
+    join person.address a on h.shiptoaddressid = a.addressid
+    join person.stateprovince s on a.stateprovinceid = s.stateprovinceid
+    join purchasing.shipmethod sm on h.shipmethodid = sm.shipmethodid
+    join person.countryregion country on country.countryregioncode = s.countryregioncode
+    group by countryname, shipmethodname
+    order by countryname, shipmethodname;
+
 ##### Assumptions
 
 - I assume that the sales.salesorderdetail.unitprice is the unit price *before* the discount (sales.salesorderdetail.unitpricediscount) application.
