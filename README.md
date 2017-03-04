@@ -26,6 +26,8 @@ The Sale Fact most interesting measures are quantity, unit price and revenue.
 
 The most interesting dimension root I've found are Product, Customer, City and Date, Salesperson, Currency and Ship-method.
 
+![Sale fact schema](./images/saleFact.png "Sale fact schema")
+
 
 #### Dimensions
 
