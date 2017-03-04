@@ -1,0 +1,37 @@
+<project name="dw" id="3cf75503-6e0f-4537-9727-b164eed8b1e4" toolversion="2.37.0.0">
+  <datawarehouse>
+    <datamarts>
+      <datamart name="Datamart" id="f6980e40-40d9-431f-b520-4132d10353cd">
+        <factschemas>
+          <factschema id="735836c0-1fe5-46ba-a8e2-220392045c0d" />
+        </factschemas>
+      </datamart>
+    </datamarts>
+  </datawarehouse>
+  <conformedHierarchies />
+  <areas>
+    <area name="Datamart" id="cca0751e-0afe-42b0-bf54-70655d31f288">
+      <factSchemas>
+        <factschema id="735836c0-1fe5-46ba-a8e2-220392045c0d" />
+      </factSchemas>
+    </area>
+  </areas>
+  <customProperties>
+    <attributes />
+    <measures />
+    <facts />
+  </customProperties>
+  <linkedProperties />
+  <projectOptions>
+    <logicModelingProfile name="starschema" isEditable="false" />
+    <logicModelingNamePrefixes DimensionTableNamePrefix="DT_" FactTableNamePrefix="FT_" BridgeTableNamePrefix="BT_" NavigationTableNamePrefix="NAV_" JunkTableNamePrefix="JT_" PrimaryKeyNamePrefix="PK_" ForeignKeyNamePrefix="FK_" TableIdNamePrefix="ID_" ConformedDimensionViewNamePrefix="DTV_" TemporalScenarioRollbackFromFieldName="FROM" TemporalScenarioRollbackToFieldName="TO" TemporalScenarioRollbackMasterFieldName="MASTER" />
+    <logicalModelingDefaultTypes>
+      <attributes name="VARCHAR" length="255" scale="-1" precision="-1" />
+      <measures name="DECIMAL" length="-1" scale="3" precision="18" />
+      <surrogates name="INT" length="-1" scale="-1" precision="-1" />
+      <temporalScenarioRollbackFromType name="DATE" length="-1" scale="-1" precision="-1" />
+      <temporalScenarioRollbackToType name="DATE" length="-1" scale="-1" precision="-1" />
+      <temporalScenarioRollbackMasterType name="INT" length="-1" scale="-1" precision="-1" />
+    </logicalModelingDefaultTypes>
+  </projectOptions>
+</project>
