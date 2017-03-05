@@ -24,7 +24,7 @@ I started the process by analysing the ER schema (AdventureWorkdsDbDiagram) and 
 
 The Sale Fact most interesting measures are quantity, unit price and revenue.
 
-The most interesting dimension root I've found are Product, Customer, City and Date, Salesperson, Currency and Ship-method.
+The most interesting dimension root I've found are Product, Customer, City and Date, Currency and Ship-method.
 
 ![Sale fact schema](./images/saleFact.png "Sale fact schema")
 
@@ -38,9 +38,6 @@ Here I present an overview of the dimensions of the Sale fact:
         - category
 - ship-method
 - currency
-- salesperson
-    - territory
-        - country
 - customer
      - store
          - salesperson
@@ -54,17 +51,16 @@ Here I present an overview of the dimensions of the Sale fact:
         - year
     - holiday
 
-Customer and Salesperson share part of the dimension hierarchy.
-The same happens with SalesPerson, customer and city that share the country attribute.
+Customer and City share the country atribute.
 
 ---
 ##### Dynamicity
 
 Product and its categorization may be dynamic. There may be a change in how a product is classified but this should happen quite unfrequently.
 
-SalesPerson may move to a different territory and I expect this to be something to be careful about. I consider instead unlikely that a territory is assigned to a different country.
-
 Customer may move to a different store quite often and the store may be assigned to a different salesperson.
+
+SalesPerson may move to a different territory and I expect this to be something to be careful about. I consider instead unlikely that a territory is assigned to a different country.
 
 City, province and country are dimensions that I expect to have only a small chance to change.
 
@@ -197,18 +193,9 @@ The following table shows the cardinality of every dimension:
 | date            | 1126        |
 | shipping-method | 5           |
 | customer        | 19820       |
-| salesperson     | 7           |
 | currency        | 105         |
 | city            | 613         |
 
-The maximum cardinality for the Sale event is ~ 25 * 10^16
+The maximum cardinality for the Sale event is ~ 4 * 10^16
 
-The sparsity of the schema is 5 * 10^(-9).
-
-### ROLAP schema
-
-The sale fact becomes 
-
-### Views
-
-## 4 - OLAP Queries
+The sparsity of the schema is 3 * 10^(-11).
