@@ -171,7 +171,7 @@ Sale[country, ship-method].quantity
     group by countryname, shipmethodname
     order by countryname, shipmethodname;Sale[year, sales-person, category='Bikes'].quantity
 
-#### 17
+#### q7
 
 Quantity of bikes sold every year by every sales person.
 
