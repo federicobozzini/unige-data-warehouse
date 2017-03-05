@@ -52,6 +52,7 @@ Here I present an overview of the dimensions of the Sale fact:
 - date
     - month
         - year
+    - holiday
 
 Customer and Salesperson share part of the dimension hierarchy.
 The same happens with SalesPerson, customer and city that share the country attribute.
@@ -203,3 +204,11 @@ The following table shows the cardinality of every dimension:
 The maximum cardinality for the Sale event is ~ 25 * 10^16
 
 The sparsity of the schema is 5 * 10^(-9).
+
+### ROLAP schema
+
+The sale fact becomes 
+
+### Views
+
+## 4 - OLAP Queries
