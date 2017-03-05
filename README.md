@@ -199,3 +199,19 @@ The following table shows the cardinality of every dimension:
 The maximum cardinality for the Sale event is ~ 4 * 10^16
 
 The sparsity of the schema is 3 * 10^(-11).
+
+### ROLAP schema
+
+The ROLAP schema created from the logical modelling is the one shown in the figure.
+
+![Sale rolap schema](./images/rolapSchema.png "Sale rolap schema")
+
+The sale fact is converted into the sale table, as well as the main dimentions.
+
+Ship-method, Currency and Date are quite straightforward to convert. They are converted in a single table where the attributes become the fields of the table.
+
+Product is a more complex dimention. I decided to use a star schema with a rollback approach (type 3) to manage the dynamicity of the dimention.
+
+With the City dimention I decided to use a mix of a star and a snowflake schema, snowflaking on the country attribute, since this attribute is shared with another dimension hierarchy.
+
+The Customer dimention is the most dynamic one. I've decided to use again a mix of star and snowflake schema, snowflaking on the SalesPerson and Country attributes. On the first one because it may be useful for the views, and the second one to avoid data duplication. In the case of the Customer dimension I care only about the most recent values, so I don't keep track the historical values so I just take the today-for-yesterday approach (type 1).
