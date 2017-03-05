@@ -81,3 +81,22 @@ join purchasing.shipmethod sm on h.shipmethodid = sm.shipmethodid
 join person.countryregion country on country.countryregioncode = s.countryregioncode
 group by countryname, shipmethodname
 order by countryname, shipmethodname;
+
+-- q7 Sale[year, sales-person, category='Bikes'].quantity
+
+select extract(year from h.orderdate) as year, 
+    pe.firstname || ' ' || pe.lastname as fullname, 
+    sum(d.orderqty) as bikesold
+from production.product p 
+right join sales.salesorderdetail d on p.productid = d.productid 
+join sales.salesorderheader h on h.salesorderid = d.salesorderid
+left join sales.currencyrate c on h.currencyrateid = c.currencyrateid
+left join production.productsubcategory ps on p.productsubcategoryid = ps.productsubcategoryid
+left join production.productcategory pc on ps.productcategoryid = pc.productcategoryid
+right join sales.customer cu on h.customerid = cu.customerid
+right join sales.store st on cu.storeid = st.businessentityid
+right join sales.salesperson sp on st.salespersonid = sp.businessentityid
+right join person.person pe on sp.businessentityid = pe.businessentityid
+where pc.name = 'Bikes'
+group by year, pe.businessentityid, fullname
+order by year, bikesold desc;
