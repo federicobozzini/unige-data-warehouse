@@ -181,3 +181,25 @@ Sale[country, ship-method].quantity
 - When considering the measure "revenue" I always mean the actual revenue value converted in USD.
 
 - As for the dimension "city", attribute city-name is  "city-name, state-province" due to the ambiguity name we have with the city name only. I assume there can be no two cities with the same name inside the same province.
+
+## 3 - Data warehouse ROLAP logical design
+
+### Data Volume
+
+The sale fact includes 121317 events.
+
+The following table shows the cardinality of every dimension:
+
+| Dimension name  | Cardinality |
+|-----------------|-------------|
+| product         | 504         |
+| date            | 1126        |
+| shipping-method | 5           |
+| customer        | 19820       |
+| salesperson     | 7           |
+| currency        | 105         |
+| city            | 613         |
+
+The maximum cardinality for the Sale event is ~ 25 * 10^16
+
+The sparsity of the schema is 5 * 10^(-9).
