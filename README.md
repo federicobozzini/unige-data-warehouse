@@ -66,7 +66,7 @@ SalesPerson may move to a different territory and I expect this to be something 
 
 Customer may move to a different store quite often and the store may be assigned to a different salesperson.
 
-City, province and country are dimensions that I expect to have only a small chanceto change.
+City, province and country are dimensions that I expect to have only a small chance to change.
 
 Date is fixed.
 
