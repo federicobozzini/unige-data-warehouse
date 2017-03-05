@@ -35,7 +35,7 @@
     </node>
     <node id="5481e630-1626-4373-bc89-a3346b4e277d">
       <data key="d1">
-        <ico:Attribute Name="salesperson" Description="" Id="5481e630-1626-4373-bc89-a3346b4e277d" X="920" Y="386" BackgroundColor="#FFFFFF" BorderColor="#00539C" IsBoldText="false" IsItalicText="false" IsDescriptive="false" IsOptional="false" IsShared="true" SampleValues="" Note="" MasterId="00000000-0000-0000-0000-000000000000" HierarchyId="00000000-0000-0000-0000-000000000000" MasterHierarchyId="00000000-0000-0000-0000-000000000000" IsCrossDimensional="false" TemporalScenario="UpToDate" SourceTable="" SourceField="" HasHierarchyCollapsed="false">
+        <ico:Attribute Name="salesperson" Description="" Id="5481e630-1626-4373-bc89-a3346b4e277d" X="950" Y="360" BackgroundColor="#FFFFFF" BorderColor="#00539C" IsBoldText="false" IsItalicText="false" IsDescriptive="false" IsOptional="false" IsShared="false" SampleValues="" Note="" MasterId="00000000-0000-0000-0000-000000000000" HierarchyId="00000000-0000-0000-0000-000000000000" MasterHierarchyId="00000000-0000-0000-0000-000000000000" IsCrossDimensional="false" TemporalScenario="UpToDate" SourceTable="" SourceField="" HasHierarchyCollapsed="false">
           <ico:customProperties />
           <ico:linkedProperties />
           <ico:logicalModeling />
@@ -98,7 +98,7 @@
     </node>
     <node id="e45f9e6d-f5b1-4f21-af63-1e20a906984e">
       <data key="d1">
-        <ico:Attribute Name="store" Description="" Id="e45f9e6d-f5b1-4f21-af63-1e20a906984e" X="876" Y="310" BackgroundColor="#FFFFFF" BorderColor="#00539C" IsBoldText="false" IsItalicText="false" IsDescriptive="false" IsOptional="false" IsShared="false" SampleValues="" Note="" MasterId="00000000-0000-0000-0000-000000000000" HierarchyId="00000000-0000-0000-0000-000000000000" MasterHierarchyId="00000000-0000-0000-0000-000000000000" IsCrossDimensional="false" TemporalScenario="UpToDate" SourceTable="" SourceField="" HasHierarchyCollapsed="false">
+        <ico:Attribute Name="store" Description="" Id="e45f9e6d-f5b1-4f21-af63-1e20a906984e" X="885" Y="332" BackgroundColor="#FFFFFF" BorderColor="#00539C" IsBoldText="false" IsItalicText="false" IsDescriptive="false" IsOptional="false" IsShared="false" SampleValues="" Note="" MasterId="00000000-0000-0000-0000-000000000000" HierarchyId="00000000-0000-0000-0000-000000000000" MasterHierarchyId="00000000-0000-0000-0000-000000000000" IsCrossDimensional="false" TemporalScenario="UpToDate" SourceTable="" SourceField="" HasHierarchyCollapsed="false">
           <ico:customProperties />
           <ico:linkedProperties />
           <ico:logicalModeling />
@@ -141,12 +141,15 @@
         </ico:Attribute>
       </data>
     </node>
-    <edge id="9eab85b9-9c61-41e6-99bd-e78b73d57c04" source="49cba963-8e35-4ad1-bbac-6eaf28c4ab6f" target="5481e630-1626-4373-bc89-a3346b4e277d" IsBoldText="false" IsItalicText="false" HierarchyId="00000000-0000-0000-0000-000000000000" MasterHierarchyId="00000000-0000-0000-0000-000000000000" MasterId="00000000-0000-0000-0000-000000000000">
-      <data key="d2">
-        <ico:Arc Role="" IsConvergence="false" IsOptional="false" IsMultiple="false" IsRecursive="false" IndexOfRecursion="0" SourceConnectorPosition="Auto" IndexOfSameNodesLink="0" />
+    <node id="8bddf2ed-7caf-4b78-863a-e50e214b20bf">
+      <data key="d1">
+        <ico:Attribute Name="holiday" Description="" Id="8bddf2ed-7caf-4b78-863a-e50e214b20bf" X="590" Y="596" BackgroundColor="#FFFFFF" BorderColor="#00539C" IsBoldText="false" IsItalicText="false" IsDescriptive="false" IsOptional="false" IsShared="false" SampleValues="" Note="" MasterId="00000000-0000-0000-0000-000000000000" HierarchyId="00000000-0000-0000-0000-000000000000" MasterHierarchyId="00000000-0000-0000-0000-000000000000" IsCrossDimensional="false" TemporalScenario="UpToDate" SourceTable="" SourceField="" HasHierarchyCollapsed="false">
+          <ico:customProperties />
+          <ico:linkedProperties />
+          <ico:logicalModeling />
+        </ico:Attribute>
       </data>
-      <linkedProperties xmlns="" />
-    </edge>
+    </node>
     <edge id="7c000b4c-6354-41cb-985a-aec81068ab86" source="49cba963-8e35-4ad1-bbac-6eaf28c4ab6f" target="085bd0a6-e9b3-4f31-9f30-0b69ed25bb1e" IsBoldText="false" IsItalicText="false" HierarchyId="00000000-0000-0000-0000-000000000000" MasterHierarchyId="00000000-0000-0000-0000-000000000000" MasterId="00000000-0000-0000-0000-000000000000">
       <data key="d2">
         <ico:Arc Role="" IsConvergence="false" IsOptional="false" IsMultiple="false" IsRecursive="false" IndexOfRecursion="0" SourceConnectorPosition="Auto" IndexOfSameNodesLink="0" />
@@ -159,15 +162,27 @@
       </data>
       <linkedProperties xmlns="" />
     </edge>
-    <edge id="f1e468e7-fd2c-46a7-94fa-47c0d1c0c77d" source="f8f45d93-3968-4c21-bbe2-05ddf1df4df4" target="91eca9eb-e879-4d7c-be6c-456a3d1cb80d" IsBoldText="false" IsItalicText="false" HierarchyId="00000000-0000-0000-0000-000000000000" MasterHierarchyId="00000000-0000-0000-0000-000000000000" MasterId="00000000-0000-0000-0000-000000000000">
-      <data key="d2">
-        <ico:Arc Role="" IsConvergence="false" IsOptional="false" IsMultiple="false" IsRecursive="false" IndexOfRecursion="0" SourceConnectorPosition="Auto" IndexOfSameNodesLink="1" />
-      </data>
-      <linkedProperties xmlns="" />
-    </edge>
     <edge id="af51f184-3503-469b-ad80-870299916189" source="49cba963-8e35-4ad1-bbac-6eaf28c4ab6f" target="234e7158-ebb5-4e1e-b7b5-838194d77adb" IsBoldText="false" IsItalicText="false" HierarchyId="00000000-0000-0000-0000-000000000000" MasterHierarchyId="00000000-0000-0000-0000-000000000000" MasterId="00000000-0000-0000-0000-000000000000">
       <data key="d2">
         <ico:Arc Role="" IsConvergence="false" IsOptional="false" IsMultiple="false" IsRecursive="false" IndexOfRecursion="0" SourceConnectorPosition="Auto" IndexOfSameNodesLink="0" />
+      </data>
+      <linkedProperties xmlns="" />
+    </edge>
+    <edge id="ffbb6b1c-4418-4256-b987-1331abcd05f6" source="49cba963-8e35-4ad1-bbac-6eaf28c4ab6f" target="974fefbf-a2e4-4c97-b795-9863e326f54f" IsBoldText="false" IsItalicText="false" HierarchyId="00000000-0000-0000-0000-000000000000" MasterHierarchyId="00000000-0000-0000-0000-000000000000" MasterId="00000000-0000-0000-0000-000000000000">
+      <data key="d2">
+        <ico:Arc Role="" IsConvergence="false" IsOptional="false" IsMultiple="false" IsRecursive="false" IndexOfRecursion="0" SourceConnectorPosition="Auto" IndexOfSameNodesLink="0" />
+      </data>
+      <linkedProperties xmlns="" />
+    </edge>
+    <edge id="645ee8ca-2dc0-438d-a549-9ded0fa812ee" source="49cba963-8e35-4ad1-bbac-6eaf28c4ab6f" target="ea0b616b-6f9a-4de2-ad72-e5cd6b1fa98c" IsBoldText="false" IsItalicText="false" HierarchyId="00000000-0000-0000-0000-000000000000" MasterHierarchyId="00000000-0000-0000-0000-000000000000" MasterId="00000000-0000-0000-0000-000000000000">
+      <data key="d2">
+        <ico:Arc Role="" IsConvergence="false" IsOptional="false" IsMultiple="false" IsRecursive="false" IndexOfRecursion="0" SourceConnectorPosition="Auto" IndexOfSameNodesLink="0" />
+      </data>
+      <linkedProperties xmlns="" />
+    </edge>
+    <edge id="f1e468e7-fd2c-46a7-94fa-47c0d1c0c77d" source="f8f45d93-3968-4c21-bbe2-05ddf1df4df4" target="91eca9eb-e879-4d7c-be6c-456a3d1cb80d" IsBoldText="false" IsItalicText="false" HierarchyId="00000000-0000-0000-0000-000000000000" MasterHierarchyId="00000000-0000-0000-0000-000000000000" MasterId="00000000-0000-0000-0000-000000000000">
+      <data key="d2">
+        <ico:Arc Role="" IsConvergence="false" IsOptional="false" IsMultiple="false" IsRecursive="false" IndexOfRecursion="0" SourceConnectorPosition="Auto" IndexOfSameNodesLink="1" />
       </data>
       <linkedProperties xmlns="" />
     </edge>
@@ -201,12 +216,6 @@
       </data>
       <linkedProperties xmlns="" />
     </edge>
-    <edge id="ffbb6b1c-4418-4256-b987-1331abcd05f6" source="49cba963-8e35-4ad1-bbac-6eaf28c4ab6f" target="974fefbf-a2e4-4c97-b795-9863e326f54f" IsBoldText="false" IsItalicText="false" HierarchyId="00000000-0000-0000-0000-000000000000" MasterHierarchyId="00000000-0000-0000-0000-000000000000" MasterId="00000000-0000-0000-0000-000000000000">
-      <data key="d2">
-        <ico:Arc Role="" IsConvergence="false" IsOptional="false" IsMultiple="false" IsRecursive="false" IndexOfRecursion="0" SourceConnectorPosition="Auto" IndexOfSameNodesLink="0" />
-      </data>
-      <linkedProperties xmlns="" />
-    </edge>
     <edge id="63fcf1dd-2e00-49f3-973d-76a3ec417095" source="085bd0a6-e9b3-4f31-9f30-0b69ed25bb1e" target="12da9cae-ce70-40e5-b8cb-ad8475c09ddd" IsBoldText="false" IsItalicText="false" HierarchyId="00000000-0000-0000-0000-000000000000" MasterHierarchyId="00000000-0000-0000-0000-000000000000" MasterId="00000000-0000-0000-0000-000000000000">
       <data key="d2">
         <ico:Arc Role="" IsConvergence="false" IsOptional="false" IsMultiple="false" IsRecursive="false" IndexOfRecursion="0" SourceConnectorPosition="Auto" IndexOfSameNodesLink="1" />
@@ -219,13 +228,12 @@
       </data>
       <linkedProperties xmlns="" />
     </edge>
-    <edge id="645ee8ca-2dc0-438d-a549-9ded0fa812ee" source="49cba963-8e35-4ad1-bbac-6eaf28c4ab6f" target="ea0b616b-6f9a-4de2-ad72-e5cd6b1fa98c" IsBoldText="false" IsItalicText="false" HierarchyId="00000000-0000-0000-0000-000000000000" MasterHierarchyId="00000000-0000-0000-0000-000000000000" MasterId="00000000-0000-0000-0000-000000000000">
+    <edge id="2225410e-629a-46c3-823d-e29ccb770536" source="085bd0a6-e9b3-4f31-9f30-0b69ed25bb1e" target="8bddf2ed-7caf-4b78-863a-e50e214b20bf" IsBoldText="false" IsItalicText="false" HierarchyId="00000000-0000-0000-0000-000000000000" MasterHierarchyId="00000000-0000-0000-0000-000000000000" MasterId="00000000-0000-0000-0000-000000000000">
       <data key="d2">
-        <ico:Arc Role="" IsConvergence="false" IsOptional="false" IsMultiple="false" IsRecursive="false" IndexOfRecursion="0" SourceConnectorPosition="Auto" IndexOfSameNodesLink="0" />
+        <ico:Arc Role="" IsConvergence="false" IsOptional="false" IsMultiple="false" IsRecursive="false" IndexOfRecursion="0" SourceConnectorPosition="Auto" IndexOfSameNodesLink="1" />
       </data>
       <linkedProperties xmlns="" />
     </edge>
-    <hierarchy id="a6c52345-6728-455e-9753-5b30ca2c7b4c" rootArcId="9eab85b9-9c61-41e6-99bd-e78b73d57c04" name="salesperson" description="" note="" />
     <hierarchy id="5a22d2fa-5631-45b1-b44b-8533dd6b277a" rootArcId="7c000b4c-6354-41cb-985a-aec81068ab86" name="date" description="" note="" />
     <hierarchy id="30444fbf-bc57-4f66-aeb2-893ef2f8e5d2" rootArcId="7b390696-0de2-49f4-94bd-45c2907acd34" name="customer" description="" note="" />
     <hierarchy id="caba6ad8-a1af-4e5d-84ac-4a588da1efeb" rootArcId="af51f184-3503-469b-ad80-870299916189" name="city" description="" note="" />
@@ -233,9 +241,6 @@
     <hierarchy id="28e98b3a-622b-4075-9b7e-c5f1349c3109" rootArcId="645ee8ca-2dc0-438d-a549-9ded0fa812ee" name="ship-method" description="" note="" />
   </graph>
   <additivityMatrix xmlns="">
-    <item measureId="938d64a2-f501-4f07-89ab-0142d4284341" hierarchyId="a6c52345-6728-455e-9753-5b30ca2c7b4c">
-      <operator id="Sum" />
-    </item>
     <item measureId="938d64a2-f501-4f07-89ab-0142d4284341" hierarchyId="5a22d2fa-5631-45b1-b44b-8533dd6b277a">
       <operator id="Sum" />
     </item>
@@ -251,9 +256,6 @@
     <item measureId="938d64a2-f501-4f07-89ab-0142d4284341" hierarchyId="28e98b3a-622b-4075-9b7e-c5f1349c3109">
       <operator id="Sum" />
     </item>
-    <item measureId="aff24456-d03e-43a5-9678-0428b1514f12" hierarchyId="a6c52345-6728-455e-9753-5b30ca2c7b4c">
-      <operator id="Sum" />
-    </item>
     <item measureId="aff24456-d03e-43a5-9678-0428b1514f12" hierarchyId="5a22d2fa-5631-45b1-b44b-8533dd6b277a">
       <operator id="Sum" />
     </item>
@@ -267,9 +269,6 @@
       <operator id="Sum" />
     </item>
     <item measureId="aff24456-d03e-43a5-9678-0428b1514f12" hierarchyId="28e98b3a-622b-4075-9b7e-c5f1349c3109">
-      <operator id="Sum" />
-    </item>
-    <item measureId="0621615c-0532-4a28-8ca4-0c4572ad917c" hierarchyId="a6c52345-6728-455e-9753-5b30ca2c7b4c">
       <operator id="Sum" />
     </item>
     <item measureId="0621615c-0532-4a28-8ca4-0c4572ad917c" hierarchyId="5a22d2fa-5631-45b1-b44b-8533dd6b277a">
