@@ -4,6 +4,7 @@ services:
     image: acrrd/dw-workstation
     container_name: dwws
     ports:
-    - "2023:22"
+      - "2023:22"
     volumes:
-    - .:/home/student/share
+      - .:/home/student/share
+    restart: always
