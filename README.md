@@ -332,3 +332,154 @@ The pattern of this view is {year, category, shipmethod, country, currency}.
 The secondary fact of the sales by country can be used to optimize queries q3 and q6.
 
 ![Sale by country](./images/view2Schema.png "Sale by country schema")
+
+## OLAP Queries
+
+### The workload
+
+The queries rewritten to use the rolap model:
+
+#### q1
+
+The sum of all revenues for the year 2013 for the product category "Bikes"
+
+Sale[category = 'Bikes', year=2013].revenue
+
+    select sum(s.revenue)
+    from rolap.salebyyearandcategory s
+    join rolap.year y on s.yearid = y.yearid
+    join rolap.category c on s.categoryid = c.categoryid
+    where y.year = 2013
+    and c.category = 'Bikes';
+
+#### q2
+
+The list of the sums of all revenues for all the years divided by product category
+
+Sale[category, year].revenue
+
+    select c.category,
+        y.year,
+        sum(s.revenue)
+    from rolap.salebyyearandcategory s
+    join rolap.year y on s.yearid = y.yearid
+    join rolap.category c on s.categoryid = c.categoryid
+    group by c.category, y.year
+    order by c.category, y.year;
+
+#### q3
+
+The list of all products of X category that generated a revenue greater than 200 during the week before Christmas of 2012 in the UK
+
+Sale[date>=18/12/2012 AND date<=25/12/2012, revenue> 200, country='UK'].product
+
+    select p.exid as productid, p.name as product
+    from rolap.salebycountry s
+    join rolap.product p on s.productid = p.productid
+    join rolap.country c on s.countryid = c.countryid
+    join rolap.date d on s.dateid = d.dateid
+    where c.name = 'United Kingdom'
+    and d.date between ('2012-12-25'::date - '1 week'::interval) and '2012-12-25'::date
+    group by p.exid, p.name
+    having sum(s.revenue) >= 1500;
+
+#### q4
+
+The list of all cities where the product 'Mountain-200 Silver, 42' has been sold at least 5 times in the same date in 2013
+
+Sale[product='Mountain-200 Silver, 42', date, year=2013, quantity>=5].city
+
+    select d.date, c.name as city
+    from rolap.sale s
+    join rolap.product p on s.productid = p.productid
+    join rolap.date d on s.dateid = d.dateid
+    join rolap.year y on d.yearid = y.yearid
+    join rolap.city c on s.cityid = c.cityid
+    where p.name = 'Mountain-200 Silver, 42'
+    and year = 2013
+    group by d.date, c.name
+    having sum(s.quantity) >= 5;
+
+#### q5
+
+The average revenue for all the currencies by year
+
+Sale[currency, year].revenue
+
+    select c.currencycode, y.year, sum(revenue)
+    from rolap.sale s
+    join rolap.date d on s.dateid = d.dateid
+    join rolap.year y on d.yearid = y.yearid
+    join rolap.currency c on s.currencyid = c.currencyid
+    group by c.currencycode, y.year;
+
+#### q6
+
+Quantity of product sent by shipping method for every country
+
+Sale[country, ship-method].quantity
+
+    select c.name as country, sm.name as shipmethod, sum(quantity)
+    from rolap.salebycountry s
+    join rolap.country c on s.countryid = c.countryid
+    join rolap.shipmethod sm on s.shipmethodid = sm.shipmethodid
+    group by c.name, sm.name
+    order by c.name, sm.name;
+
+#### q7
+
+Quantity of bikes sold every year by every sales person.
+
+Sale[year, salesperson, category='Bikes'].quantity
+
+    select y.year as year,
+        sp.name as fullname,
+        sum(s.revenue) as bikesold
+    from rolap.salebyyearandcategory s
+    join rolap.year y on s.yearid = y.yearid
+    join rolap.category c on s.categoryid = c.categoryid
+    join rolap.customer cu on s.customerid = cu.customerid
+    join rolap.salesperson sp on cu.salespersonid = sp.salespersonid
+    where sp.name <> 'no salesperson'
+    group by y.year, fullname
+    order by y.year, bikesold desc;
+
+#### q8
+
+Quantity of bikes sold per year in every store which sold at least 200
+
+Sale[year, store, category='Bikes', quantity>=200].quantity
+
+    select y.year as year,
+        cu.store as store,
+        sum(s.quantity) as bikesold
+    from rolap.salebyyearandcategory s
+    join rolap.year y on s.yearid = y.yearid
+    join rolap.category c on s.categoryid = c.categoryid
+    join rolap.customer cu on s.customerid = cu.customerid
+    where cu.store <> 'no store'
+    and c.category = 'Bikes'
+    group by y.year, store
+    having sum(quantity) >= 200
+    order by y.year, bikesold desc;
+
+#### q9
+
+Quantity of bikes sold in every store which sold at least 200
+
+Sale[store, category='Bikes', quantity>=200].quantity
+
+    select cu.store as store,
+        sum(s.quantity) as bikesold
+    from rolap.salebyyearandcategory s
+    join rolap.category c on s.categoryid = c.categoryid
+    join rolap.customer cu on s.customerid = cu.customerid
+    where cu.store <> 'no store'
+    and c.category = 'Bikes'
+    group by store
+    having sum(quantity) >= 200
+    order by bikesold desc;
+
+#### Note
+
+With the queries involving prices and revenues I noted that small differences betweeen the 2 different versions of the query are possible. This is due to rounding errors on the calculations.
