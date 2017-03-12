@@ -238,3 +238,13 @@ Product is a more complex dimention. I decided to use a star schema with a rollb
 With the City dimention I decided to use a mix of a star and a snowflake schema, snowflaking on the country attribute, since this attribute is shared with another dimension hierarchy.
 
 The Customer dimention is the most dynamic one. I've decided to use again a mix of star and snowflake schema, snowflaking on the SalesPerson and Country attributes. On the first one because it may be useful for the views, and the second one to avoid data duplication. In the case of the Customer dimension I care only about the most recent values, so I don't keep track the historical values so I just take the today-for-yesterday approach (type 1).
+
+### Data warehouse creation
+
+The data warehouse design on Postgres, starting from the ROLAP schema, was pretty straighforward. 
+
+I had to decide how to represent the date values. I decided to encode the years by using only a numer, the months by using a varchar (with a format 'mm-yyyy') and the date by using a timestamp.
+
+I added a column 'exid' to some of the data warehouse tables as a reference to the original table (with no foreign key for portability reasons) to simplify the ETL process of the next phase.
+
+I renamed some columns for practical reasons. For instance 'from' became 'fromts' and 'to' became 'tots'.
