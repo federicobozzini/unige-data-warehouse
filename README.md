@@ -248,3 +248,17 @@ I had to decide how to represent the date values. I decided to encode the years 
 I added a column 'exid' to some of the data warehouse tables as a reference to the original table (with no foreign key for portability reasons) to simplify the ETL process of the next phase.
 
 I renamed some columns for practical reasons. For instance 'from' became 'fromts' and 'to' became 'tots'.
+
+### Data warehouse data insertion
+
+I decided to program all the ETL process by using exclusevely Postgres.
+
+The date field posed some challenges since it's not a real table in the source db. I decided to generate programatically all the values for the table for the days going from 1/1/2000 to 31/12/2020. 
+
+I decided to handle missing data by adding some fake values to some dimensional tables. For instance I created a tuple *'no country'* in the country table, a *'no category'* in the category table.
+
+I also replaced the null values in the star schemas with fake values. For instances customers without a store associated had null replaced with *'no store'* and product with no subcategories has null replaced with *'no subcategories'*.
+
+Since I wanted to use the city dimension, but there was no city unique identifier in the source db, I decided to encode the cities by using the format *"city-name, state-province"*. I assume this encoding is non-ambiguous.
+
+I also assumed that when no currency was present for a sale, the currency actually used was the USD.
