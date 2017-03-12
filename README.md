@@ -333,7 +333,7 @@ The secondary fact of the sales by country can be used to optimize queries q3 an
 
 ![Sale by country](./images/view2Schema.png "Sale by country schema")
 
-## OLAP Queries
+## 4 - OLAP Queries
 
 ### The workload
 
