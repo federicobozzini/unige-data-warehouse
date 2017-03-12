@@ -14,7 +14,7 @@ select generate_series(
 -- date, insertion --
 insert into rolap.date (date, month, yearid, holiday)
 select date as date,
-    (extract (month from date) || ' ' || extract (year from date)) as month,
+    (extract (year from date) || ' ' || lpad(extract(month from date)::text, 2, '0')) as month,
     (
         select yearid 
         from rolap.year
@@ -235,4 +235,3 @@ group by s.dateid,
     s.shipmethodid,
     s.productid,
     c.countryid;
-    
