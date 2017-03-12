@@ -1,1 +1,4 @@
 .vscode/
+dbData/*
+!dbData/.gitkeep
+dbInit.sql
