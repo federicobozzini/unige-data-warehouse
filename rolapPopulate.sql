@@ -177,3 +177,62 @@ set currencyid = (
     where currencycode = 'USD'
 )
 where currencyid is null;
+
+-- saleByYearAndCategory, insertion --
+
+insert into rolap.salebyyearandcategory (
+    yearid, 
+    customerid, 
+    currencyid, 
+    shipmethodid, 
+    categoryid, 
+    cityid, 
+    quantity,
+    price,
+    revenue)
+select d.yearid,
+    s.customerid,
+    s.currencyid,
+    s.shipmethodid,
+    p.categoryid,
+    s.cityid,
+    sum(s.quantity),
+    sum(s.price),
+    sum(s.revenue)
+from rolap.sale s
+join rolap.date d on s.dateid = d.dateid
+join rolap.product p on s.productid = p.productid
+group by d.yearid,
+    s.customerid,
+    s.currencyid,
+    s.shipmethodid,
+    p.categoryid,
+    s.cityid;
+
+-- saleByCountry, insertion --
+
+insert into rolap.salebycountry (
+    dateid, 
+    currencyid, 
+    shipmethodid, 
+    productid, 
+    countryid, 
+    quantity,
+    price,
+    revenue)
+select s.dateid,
+    s.currencyid,
+    s.shipmethodid,
+    s.productid,
+    c.countryid,
+    sum(s.quantity),
+    sum(s.price),
+    sum(s.revenue)
+from rolap.sale s
+join rolap.city c on s.cityid = c.cityid
+group by s.dateid,
+    s.currencyid,
+    s.shipmethodid,
+    s.productid,
+    c.countryid;
+    

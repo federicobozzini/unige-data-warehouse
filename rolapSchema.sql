@@ -97,3 +97,36 @@ create schema rolap
         foreign key (productid) references product (productid),
         foreign key (cityid) references city (cityid)
     )
+    create table salebyyearandcategory (
+        yearid int,
+        customerid int,
+        currencyid int,
+        shipmethodid int,
+        categoryid int,
+        cityid int,
+        quantity int,
+        price numeric,
+        revenue numeric,
+        foreign key (yearid) references year (yearid),
+        foreign key (customerid) references customer (customerid),
+        foreign key (currencyid) references currency (currencyid),
+        foreign key (shipmethodid) references shipmethod (shipmethodid),
+        foreign key (categoryid) references category (categoryid),
+        foreign key (cityid) references city (cityid)
+    )
+    create table salebycountry (
+        dateid int,
+        countryid int,
+        currencyid int,
+        shipmethodid int,
+        productid int,
+        quantity int,
+        price numeric,
+        revenue numeric,
+        foreign key (dateid) references date (dateid),
+        foreign key (countryid) references country (countryid),
+        foreign key (currencyid) references currency (currencyid),
+        foreign key (shipmethodid) references shipmethod (shipmethodid),
+        foreign key (productid) references product (productid)
+    )
+    
