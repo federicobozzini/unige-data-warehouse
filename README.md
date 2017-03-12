@@ -1,6 +1,6 @@
 # dw-project
 
-## 1 - Operational data sources inspection and proling
+## 1 - Operational data sources inspection and profiling
 
 To import the data I wrote the initDb.sh script.
 
@@ -51,7 +51,7 @@ Here I present an overview of the dimensions of the Sale fact:
         - year
     - holiday
 
-Customer and City share the country atribute.
+Customer and City share the country attribute.
 
 ---
 ##### Dynamicity
