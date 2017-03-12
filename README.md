@@ -309,3 +309,26 @@ I also replaced the null values in the star schemas with fake values. For instan
 Since I wanted to use the city dimension, but there was no city unique identifier in the source db, I decided to encode the cities by using the format *"city-name, state-province"*. I assume this encoding is non-ambiguous.
 
 I also assumed that when no currency was present for a sale, the currency actually used was the USD.
+
+### Views
+
+By analasying the queries I decided to add the views representing these secondary facts:
+
+- Sales by year and category
+- Sales by country
+
+#### Sales by year and category
+
+The pattern of this view is {year, category, shipgmethod, city, customer, currency}.
+
+The secondary fact of the sales by year and category can be used to optimize queries q1, q2, q7, q8 and q9.
+
+![Sale by year and category schema](./images/view1Schema.png "Sale by year and category schema")
+
+#### Sales by country
+
+The pattern of this view is {year, category, shipmethod, country, currency}.
+
+The secondary fact of the sales by country can be used to optimize queries q3 and q6.
+
+![Sale by country](./images/view2Schema.png "Sale by country schema")
