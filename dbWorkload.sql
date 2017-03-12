@@ -106,7 +106,7 @@ order by year, bikesold desc;
 -- q8 Sale[year, store, category='Bikes', quantity>=200].quantity
 
 select extract(year from h.orderdate) as year, 
-    st.name as name, 
+    st.name as store, 
     sum(d.orderqty) as bikesold
 from production.product p 
 right join sales.salesorderdetail d on p.productid = d.productid 
@@ -126,7 +126,7 @@ order by year, bikesold desc;
 
 -- q9 Sale[store, category='Bikes', quantity>=200].quantity
 
-select st.name as name, 
+select st.name as store, 
     sum(d.orderqty) as bikesold
 from production.product p 
 right join sales.salesorderdetail d on p.productid = d.productid 
