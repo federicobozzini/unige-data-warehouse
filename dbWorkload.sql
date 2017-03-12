@@ -38,7 +38,7 @@ join person.countryregion country on country.countryregioncode = t.countryregion
 where country.name = 'United Kingdom'
 and h.orderdate between ('2012-12-25'::date - '1 week'::interval) and '2012-12-25'::date
 group by country.countryregioncode, p.productid, p.name
-having sum(d.unitprice * (1 - d.unitpricediscount) * d.orderqty * coalesce(c.averagerate, 1)) >= 1500
+having sum(d.unitprice * (1 - d.unitpricediscount) * d.orderqty * coalesce(c.averagerate, 1)) >= 1500;
 
 
 -- q4 Sale[product='Mountain-200 Silver, 42', date, year=2013, quantity>=5].city
