@@ -194,6 +194,53 @@ Sale[year, salesperson, category='Bikes'].quantity
     group by year, pe.businessentityid, fullname
     order by year, bikesold desc;
 
+#### q8
+
+Quantity of bikes sold per year in every store which sold at least 200
+
+Sale[year, store, category='Bikes', quantity>=200].quantity
+
+    select extract(year from h.orderdate) as year, 
+        st.name as name, 
+        sum(d.orderqty) as bikesold
+    from production.product p 
+    right join sales.salesorderdetail d on p.productid = d.productid 
+    join sales.salesorderheader h on h.salesorderid = d.salesorderid
+    left join sales.currencyrate c on h.currencyrateid = c.currencyrateid
+    left join production.productsubcategory ps on p.productsubcategoryid = ps.productsubcategoryid
+    left join production.productcategory pc on ps.productcategoryid = pc.productcategoryid
+    right join sales.customer cu on h.customerid = cu.customerid
+    right join sales.store st on cu.storeid = st.businessentityid
+    right join sales.salesperson sp on st.salespersonid = sp.businessentityid
+    right join person.person pe on sp.businessentityid = pe.businessentityid
+    where pc.name = 'Bikes'
+    group by year, st.businessentityid, st.name
+    having sum(d.orderqty) >= 200
+    order by year, bikesold desc;
+
+#### q9
+
+Quantity of bikes sold in every store which sold at least 200
+
+Sale[store, category='Bikes', quantity>=200].quantity
+
+    select st.name as name, 
+        sum(d.orderqty) as bikesold
+    from production.product p 
+    right join sales.salesorderdetail d on p.productid = d.productid 
+    join sales.salesorderheader h on h.salesorderid = d.salesorderid
+    left join sales.currencyrate c on h.currencyrateid = c.currencyrateid
+    left join production.productsubcategory ps on p.productsubcategoryid = ps.productsubcategoryid
+    left join production.productcategory pc on ps.productcategoryid = pc.productcategoryid
+    right join sales.customer cu on h.customerid = cu.customerid
+    right join sales.store st on cu.storeid = st.businessentityid
+    right join sales.salesperson sp on st.salespersonid = sp.businessentityid
+    right join person.person pe on sp.businessentityid = pe.businessentityid
+    where pc.name = 'Bikes'
+    group by st.businessentityid, st.name
+    having sum(d.orderqty) >= 200
+    order by bikesold desc;
+
 ##### Assumptions
 
 - I assume that the sales.salesorderdetail.unitprice is the unit price *before* the discount (sales.salesorderdetail.unitpricediscount) application.
