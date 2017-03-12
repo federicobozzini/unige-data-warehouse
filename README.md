@@ -300,7 +300,7 @@ I renamed some columns for practical reasons. For instance 'from' became 'fromts
 
 I decided to program all the ETL process by using exclusevely Postgres.
 
-The date field posed some challenges since it's not a real table in the source db. I decided to generate programatically all the values for the table for the days going from 1/1/2000 to 31/12/2020. 
+The date field posed some challenges since it's not a real table in the source db. I decided to generate programatically all the values for the table for the days going from 1/1/2000 to 31/12/2020. The attribute holiday of the date dimension was not correctly populated since I have no database of the days considered holidays (and this may even vary according to country, city, ...).
 
 I decided to handle missing data by adding some fake values to some dimensional tables. For instance I created a tuple *'no country'* in the country table, a *'no category'* in the category table.
 
