@@ -335,6 +335,11 @@ The secondary fact of the sales by country can be used to optimize queries q3 an
 
 ## 4 - OLAP Queries
 
+
+### Queries assumptions
+
+I assume here that the name value of the different dimension attributes is always unique. For instance I assume there could not be two countries with the same name.
+
 ### The workload
 
 The queries rewritten to use the rolap model:
@@ -563,6 +568,6 @@ Show the moving sum of the revenues in the top selling city, recalculated based 
     group by d.month, city, totrevenue
     order by c.totrevenue desc, d.month;
 
-##### Note
+##### q13 Note
 
 It does not account for empty months.
