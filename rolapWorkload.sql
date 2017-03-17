@@ -26,24 +26,24 @@ select p.exid as productid, p.name as product
 from rolap.salebycountry s
 join rolap.product p on s.productid = p.productid
 join rolap.country c on s.countryid = c.countryid
-join rolap.date d on s.dateid = d.dateid
+join rolap.datet d on s.dateid = d.dateid
 where c.name = 'United Kingdom'
-and d.date between ('2012-12-25'::date - '1 week'::interval) and '2012-12-25'::date
+and d.datets between ('2012-12-25'::date - '1 week'::interval) and '2012-12-25'::date
 group by p.exid, p.name
 having sum(s.revenue) >= 1500;
 
 
 -- q4 Sale[product='Mountain-200 Silver, 42', date, year=2013, quantity>=5].city
 
-select d.date, c.name as city
+select d.datets, c.name as city
 from rolap.sale s
 join rolap.product p on s.productid = p.productid
-join rolap.date d on s.dateid = d.dateid
+join rolap.datet d on s.dateid = d.dateid
 join rolap.year y on d.yearid = y.yearid
 join rolap.city c on s.cityid = c.cityid
 where p.name = 'Mountain-200 Silver, 42'
 and year = 2013
-group by d.date, c.name
+group by d.datets, c.name
 having sum(s.quantity) >= 5;
 
 
@@ -51,7 +51,7 @@ having sum(s.quantity) >= 5;
 
 select c.currencycode, y.year, sum(revenue)
 from rolap.sale s
-join rolap.date d on s.dateid = d.dateid
+join rolap.datet d on s.dateid = d.dateid
 join rolap.year y on d.yearid = y.yearid
 join rolap.currency c on s.currencyid = c.currencyid
 group by c.currencycode, y.year;

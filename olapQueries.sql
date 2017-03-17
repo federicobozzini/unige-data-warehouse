@@ -56,7 +56,7 @@ select d.month,
     sum(revenue) as revenue,
     round(sum(sum(revenue)) over (partition by city order by totrevenue desc, d.month rows 3 preceding), 2) as totrevenue
 from rolap.sale s
-join rolap.date d on s.dateid = d.dateid
+join rolap.datet d on s.dateid = d.dateid
 join (
     select c2.cityid, c2.name as city, sum(revenue) as totrevenue
     from rolap.salebyyearandcategory s2
@@ -67,4 +67,4 @@ join (
     limit 1
 )  c on s.cityid = c.cityid
 group by d.month, city, totrevenue
-order by c.totrevenue desc, d.month;
+order by d.month;

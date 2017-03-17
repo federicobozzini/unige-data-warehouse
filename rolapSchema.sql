@@ -6,9 +6,9 @@ create schema rolap
         year int,
         primary key (yearid)
     )
-    create table date (
+    create table datet (
         dateid serial,
-        date timestamp,
+        datets timestamp,
         month varchar(20),
         yearid int,
         holiday boolean,
@@ -81,6 +81,7 @@ create schema rolap
         foreign key (salespersonid) references salesperson (salespersonid)
     )
     create table sale (
+        id serial,
         dateid int,
         customerid int,
         currencyid int,
@@ -90,7 +91,8 @@ create schema rolap
         quantity int,
         price numeric,
         revenue numeric,
-        foreign key (dateid) references date (dateid),
+        primary key (id),
+        foreign key (dateid) references datet (dateid),
         foreign key (customerid) references customer (customerid),
         foreign key (currencyid) references currency (currencyid),
         foreign key (shipmethodid) references shipmethod (shipmethodid),
@@ -98,6 +100,7 @@ create schema rolap
         foreign key (cityid) references city (cityid)
     )
     create table salebyyearandcategory (
+        id serial,
         yearid int,
         customerid int,
         currencyid int,
@@ -107,6 +110,7 @@ create schema rolap
         quantity int,
         price numeric,
         revenue numeric,
+        primary key (id),
         foreign key (yearid) references year (yearid),
         foreign key (customerid) references customer (customerid),
         foreign key (currencyid) references currency (currencyid),
@@ -115,6 +119,7 @@ create schema rolap
         foreign key (cityid) references city (cityid)
     )
     create table salebycountry (
+        id serial,
         dateid int,
         countryid int,
         currencyid int,
@@ -123,7 +128,8 @@ create schema rolap
         quantity int,
         price numeric,
         revenue numeric,
-        foreign key (dateid) references date (dateid),
+        primary key (id),
+        foreign key (dateid) references datet (dateid),
         foreign key (countryid) references country (countryid),
         foreign key (currencyid) references currency (currencyid),
         foreign key (shipmethodid) references shipmethod (shipmethodid),

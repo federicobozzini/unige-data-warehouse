@@ -288,13 +288,13 @@ The Customer dimention is the most dynamic one. I've decided to use again a mix 
 
 ### Data warehouse creation
 
-The data warehouse design on Postgres, starting from the ROLAP schema, was pretty straighforward. 
+The data warehouse design on Postgres, starting from the ROLAP schema, was pretty straighforward.
 
 I had to decide how to represent the date values. I decided to encode the years by using only a numer, the months by using a varchar (with a format 'mm-yyyy') and the date by using a timestamp.
 
 I added a column 'exid' to some of the data warehouse tables as a reference to the original table (with no foreign key for portability reasons) to simplify the ETL process of the next phase.
 
-I renamed some columns for practical reasons. For instance 'from' became 'fromts' and 'to' became 'tots'.
+I renamed some columns for practical reasons. For instance 'from' became 'fromts', 'to' became 'tots' and 'date' became 'datets'. I also renamed the 'date' table to 'datets'.
 
 ### Data warehouse data insertion
 
@@ -377,9 +377,9 @@ Sale[date>=18/12/2012 AND date<=25/12/2012, revenue> 200, country='UK'].product
     from rolap.salebycountry s
     join rolap.product p on s.productid = p.productid
     join rolap.country c on s.countryid = c.countryid
-    join rolap.date d on s.dateid = d.dateid
+    join rolap.datet d on s.dateid = d.dateid
     where c.name = 'United Kingdom'
-    and d.date between ('2012-12-25'::date - '1 week'::interval) and '2012-12-25'::date
+    and d.datets between ('2012-12-25'::date - '1 week'::interval) and '2012-12-25'::date
     group by p.exid, p.name
     having sum(s.revenue) >= 1500;
 
@@ -389,15 +389,15 @@ The list of all cities where the product 'Mountain-200 Silver, 42' has been sold
 
 Sale[product='Mountain-200 Silver, 42', date, year=2013, quantity>=5].city
 
-    select d.date, c.name as city
+    select d.datets, c.name as city
     from rolap.sale s
     join rolap.product p on s.productid = p.productid
-    join rolap.date d on s.dateid = d.dateid
+    join rolap.datet d on s.dateid = d.dateid
     join rolap.year y on d.yearid = y.yearid
     join rolap.city c on s.cityid = c.cityid
     where p.name = 'Mountain-200 Silver, 42'
     and year = 2013
-    group by d.date, c.name
+    group by d.datets, c.name
     having sum(s.quantity) >= 5;
 
 #### q5
@@ -408,7 +408,7 @@ Sale[currency, year].revenue
 
     select c.currencycode, y.year, sum(revenue)
     from rolap.sale s
-    join rolap.date d on s.dateid = d.dateid
+    join rolap.datet d on s.dateid = d.dateid
     join rolap.year y on d.yearid = y.yearid
     join rolap.currency c on s.currencyid = c.currencyid
     group by c.currencycode, y.year;
@@ -550,7 +550,7 @@ Show the moving sum of the revenues in the top selling city, recalculated based 
         sum(revenue) as revenue,
         round(sum(sum(revenue)) over (partition by city order by totrevenue desc, d.month rows 3 preceding), 2) as totrevenue
     from rolap.sale s
-    join rolap.date d on s.dateid = d.dateid
+    join rolap.datet d on s.dateid = d.dateid
     join (
         select c2.cityid, c2.name as city, sum(revenue) as totrevenue
         from rolap.salebyyearandcategory s2

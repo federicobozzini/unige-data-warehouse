@@ -12,19 +12,19 @@ select generate_series(
 );
 
 -- date, insertion --
-insert into rolap.date (date, month, yearid, holiday)
-select date as date,
-    (extract (year from date) || ' ' || lpad(extract(month from date)::text, 2, '0')) as month,
+insert into rolap.datet (datets, month, yearid, holiday)
+select datets as datets,
+    (extract (year from datets) || ' ' || lpad(extract(month from datets)::text, 2, '0')) as month,
     (
         select yearid 
         from rolap.year
-        where year = extract (year from date)
+        where year = extract (year from datets)
     ) as yearid,
     false as holiday
 from (select generate_series(
     '1-1-2001'::date,
     '12-31-2020'::date, '1 day'::interval
-) as date) as generator;
+) as datets) as generator;
 
 
 -- shipmethod, insertion --
@@ -148,7 +148,7 @@ insert into rolap.sale (
     quantity,
     price,
     revenue)
-select date.dateid,
+select datet.dateid,
     customer.customerid,
     currency.currencyid,
     sm.shipmethodid,
@@ -163,7 +163,7 @@ left join person.address a on h.shiptoaddressid = a.addressid
 left join person.stateprovince s on a.stateprovinceid = s.stateprovinceid
 left join rolap.shipmethod sm on h.shipmethodid = sm.exid
 left join rolap.city city on (a.city || ', ' || s.stateprovincecode) = city.name
-left join rolap.date on date.date = h.orderdate
+left join rolap.datet on datet.datets = h.orderdate
 left join rolap.customer customer on h.customerid = customer.exid
 left join sales.currencyrate cu on h.currencyrateid = cu.currencyrateid
 left join rolap.currency currency on cu.tocurrencycode = currency.currencycode
@@ -200,7 +200,7 @@ select d.yearid,
     sum(s.price),
     sum(s.revenue)
 from rolap.sale s
-join rolap.date d on s.dateid = d.dateid
+join rolap.datet d on s.dateid = d.dateid
 join rolap.product p on s.productid = p.productid
 group by d.yearid,
     s.customerid,
