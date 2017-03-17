@@ -2,3 +2,7 @@
 dbData/*
 !dbData/.gitkeep
 dbInit.sql
+hive/*
+!hive/.gitkeep
+metastore_db/
+derby.log

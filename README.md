@@ -336,7 +336,7 @@ The secondary fact of the sales by country can be used to optimize queries q3 an
 ## 4 - OLAP Queries
 
 
-### Queries assumptions
+### Query assumptions
 
 I assume here that the name value of the different dimension attributes is always unique. For instance I assume there could not be two countries with the same name.
 
@@ -571,3 +571,49 @@ Show the moving sum of the revenues in the top selling city, recalculated based 
 ##### q13 Note
 
 It does not account for empty months.
+
+## Hive
+
+### Hive ETL
+
+I decided to import the data from Postgresql to Hive by using a tool designed for such task, [Sqoop](http://sqoop.apache.org/).
+
+#### Sqoop Installation
+
+The first step was to install sqoop.
+
+Here I present a short description of the necessary steps to install Sqoop on the docker container.
+
+I started by loggin in as root:
+
+    su - root
+
+Then I installed wget, in order to be able to get the necessary packages
+
+    apt-get update
+    
+    apt-get install wget
+
+Next step was to follow [the Sqoop installation tutorial](https://docs.hortonworks.com/HDPDocuments/HDP2/HDP-2.4.2/bk_installing_manually_book/content/install_sqoop_rpms.html) and add the Sqoop repository and install the Debian package
+
+    wget http://public-repo-1.hortonworks.com/HDP/debian7/2.x/updates/2.4.2.0/hdp.list -O etc/apt/sources.list.d/hdp.list
+
+    apt-get update
+
+    apt-get install sqoop
+
+Sqoop was ready to use on the container, but the Postgresql drivers were missing. To get them
+
+    curl -L "https://jdbc.postgresql.org/download/postgresql-42.0.0.jar" -o postgresql-connector.jar
+
+    mv postgresql-connector.jar /usr/lib/sqoop/lib
+
+#### Data import
+
+Then I moved to the dw project folder and run the import command. Running the command as root was necessary due to some problems with hadoop filesystem permissions
+
+    cd /home/student/share
+
+    sqoop import-all-tables --connect jdbc:postgresql://localhost:5432/Adventureworks --username student --password foobar --outdir hive --bindir hive --warehouse-dir hive/warehouse --hive-import --hive-overwrite -- --schema=rolap
+
+The data were then imported on Hive.
