@@ -692,22 +692,22 @@ This query had some ordering problems and I needed to add an additional query to
 
 #### q13 in Hive
 
-select d.month, 
-    city, 
-    sum(revenue) as revenue,
-    round(sum(sum(revenue)) over (partition by city order by totrevenue desc, d.month rows 3 preceding), 2) as totrevenue
-from sale s
-join datet d on s.dateid = d.dateid
-join (
-    select c2.cityid, c2.name as city, sum(revenue) as totrevenue
-    from salebyyearandcategory s2
-    join city c2 on s2.cityid = c2.cityid
-    where c2.name <> 'no city'
-    group by c2.cityid, c2.name
-    order by totrevenue desc
-    limit 1
-)  c on s.cityid = c.cityid
-group by d.month, city, totrevenue
-order by month;
+    select d.month, 
+        city, 
+        sum(revenue) as revenue,
+        round(sum(sum(revenue)) over (partition by city order by totrevenue desc, d.month rows 3 preceding), 2) as totrevenue
+    from sale s
+    join datet d on s.dateid = d.dateid
+    join (
+        select c2.cityid, c2.name as city, sum(revenue) as totrevenue
+        from salebyyearandcategory s2
+        join city c2 on s2.cityid = c2.cityid
+        where c2.name <> 'no city'
+        group by c2.cityid, c2.name
+        order by totrevenue desc
+        limit 1
+    )  c on s.cityid = c.cityid
+    group by d.month, city, totrevenue
+    order by month;
 
 This query is almost identical to the original olap query q13.
