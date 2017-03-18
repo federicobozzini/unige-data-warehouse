@@ -618,6 +618,12 @@ Then I moved to the dw project folder and run the import command. Running the co
 
 The data were then imported on Hive.
 
+### Workload in Hive
+
+I made thhe queries of the workload work in Hive with only some small tweaks. The most relevant differences I noticed between postgresql and Hive were how dates are managed and the presence of some errors on the floating point operation on Hive. To solve the latter I just decided to round the final results of the calculactions.
+
+The Hive queries are not reported here since they are very similar to the original ones. They can be found in the hiveQueries.sql file.
+
 ### Olap queries in Hive
 
 #### q10 in Hive
