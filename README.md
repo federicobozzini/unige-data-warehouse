@@ -711,3 +711,114 @@ This query had some ordering problems and I needed to add an additional query to
     order by month;
 
 This query is almost identical to the original olap query q13.
+
+### 5 new queries in Hive
+
+#### q14
+
+Calculate the year with the total highest revenue in the USA
+
+    select year, round(sum(revenue),2) as totrevenue
+    from salebycountry s 
+    join country c on s.countryid = c.countryid
+    join datet d on s.dateid = d.dateid
+    join year y on d.yearid = y.yearid
+    where c.name = 'United States'
+    group by year
+    order by totrevenue desc
+    limit 1;
+
+#### q15
+
+Calculate the average quantity of bikes sold per year and store in the USA, excluding the stores that sold no bikes.
+
+    select year, round(avg(bikesold), 0) as avgbikesold
+    from (
+        select cu.store as store, 
+            year as year,
+            sum(quantity) as bikesold
+        from salebyyearandcategory s
+        join customer cu on s.customerid = cu.customerid
+        join city ci on s.cityid = ci.cityid
+        join country co on co.countryid = ci.countryid
+        join year y on s.yearid = y.yearid
+        join category c on s.categoryid = c.categoryid
+        where co.name = 'United States'
+        and c.category = 'Bikes'
+        and cu.store <> 'no store'
+        group by cu.store, year
+    ) tmp
+    group by year
+    order by year;
+
+#### q16
+
+Calculate the bikes top seller among the stores for every year
+
+    select year, store, bikesold
+    from (
+        select year, 
+            store, 
+            rank() over (partition by year order by bikesold desc) as position,
+            bikesold
+        from (
+            select cu.store as store, 
+                year as year,
+                sum(quantity) as bikesold
+            from salebyyearandcategory s
+            join customer cu on s.customerid = cu.customerid
+            join year y on s.yearid = y.yearid
+            join category c on s.categoryid = c.categoryid
+            and c.category = 'Bikes'
+            and cu.store <> 'no store'
+            group by cu.store, year
+        ) tmp2
+    ) tmp
+    where position = 1
+    order by year;
+
+#### q17
+
+List the countries that generated a revenue >= the median country revenue
+
+    select tmp.country, tmp.totrevenue
+    from (
+        select country, 
+        totrevenue, 
+        percentile_approx(totrevenue, 0.5) over () as median
+        from (
+            select name as country, sum(revenue) as totrevenue
+            from salebycountry s
+            join country c on s.countryid = c.countryid
+            group by name
+        ) tmp2
+    ) tmp
+    where tmp.totrevenue > median; 
+
+The percentile function seems to behave in a weird way. According to the documentation it doesn't return the exact median as it should, but a value than can be used as the median.
+
+#### q18
+
+Calculate the 3 top selling bike, per year
+
+    select year, product, quantitysold
+    from (
+        select year, 
+            product, 
+            rank() over (partition by year order by quantitysold desc) as position,
+            quantitysold
+        from (
+            select p.name as product, 
+                year as year,
+                sum(quantity) as quantitysold
+            from salebycountry s
+            join datet d on s.dateid = d.dateid
+            join year y on d.yearid = y.yearid
+            join product p on s.productid = p.productid
+            join category c on p.categoryid = c.categoryid
+            and c.category = 'Bikes'
+            group by p.name, year
+        ) tmp2
+    ) tmp
+    where position <= 3
+    order by year, quantitysold desc;

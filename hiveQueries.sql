@@ -193,3 +193,103 @@ join (
 )  c on s.cityid = c.cityid
 group by d.month, city, totrevenue
 order by month;
+
+-- q14 -- 
+
+select year, round(sum(revenue),2) as totrevenue
+from salebycountry s 
+join country c on s.countryid = c.countryid
+join datet d on s.dateid = d.dateid
+join year y on d.yearid = y.yearid
+where c.name = 'United States'
+group by year
+order by totrevenue desc
+limit 1;
+
+
+-- q15 --
+
+select year, round(avg(bikesold), 0) as avgbikesold
+from (
+    select cu.store as store, 
+        year as year,
+        sum(quantity) as bikesold
+    from salebyyearandcategory s
+    join customer cu on s.customerid = cu.customerid
+    join city ci on s.cityid = ci.cityid
+    join country co on co.countryid = ci.countryid
+    join year y on s.yearid = y.yearid
+    join category c on s.categoryid = c.categoryid
+    where co.name = 'United States'
+    and c.category = 'Bikes'
+    and cu.store <> 'no store'
+    group by cu.store, year
+) tmp
+group by year
+order by year;
+
+-- q16 --
+
+select year, store, bikesold
+from (
+    select year, 
+        store, 
+        rank() over (partition by year order by bikesold desc) as position,
+        bikesold
+    from (
+        select cu.store as store, 
+            year as year,
+            sum(quantity) as bikesold
+        from salebyyearandcategory s
+        join customer cu on s.customerid = cu.customerid
+        join year y on s.yearid = y.yearid
+        join category c on s.categoryid = c.categoryid
+        and c.category = 'Bikes'
+        and cu.store <> 'no store'
+        group by cu.store, year
+    ) tmp2
+) tmp
+where position = 1
+order by year;
+
+
+-- q17 --
+
+select tmp.country, tmp.totrevenue
+from (
+    select country, 
+    totrevenue, 
+    percentile_approx(totrevenue, 0.5) over () as median
+    from (
+        select name as country, sum(revenue) as totrevenue
+        from salebycountry s
+        join country c on s.countryid = c.countryid
+        group by name
+    ) tmp2
+) tmp
+where tmp.totrevenue > median; 
+
+
+-- q18 --
+
+select year, product, quantitysold
+from (
+    select year, 
+        product, 
+        rank() over (partition by year order by quantitysold desc) as position,
+        quantitysold
+    from (
+        select p.name as product, 
+            year as year,
+            sum(quantity) as quantitysold
+        from salebycountry s
+        join datet d on s.dateid = d.dateid
+        join year y on d.yearid = y.yearid
+        join product p on s.productid = p.productid
+        join category c on p.categoryid = c.categoryid
+        and c.category = 'Bikes'
+        group by p.name, year
+    ) tmp2
+) tmp
+where position <= 3
+order by year, quantitysold desc;
