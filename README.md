@@ -608,6 +608,8 @@ Sqoop was ready to use on the container, but the Postgresql drivers were missing
 
     mv postgresql-connector.jar /usr/lib/sqoop/lib
 
+    ln -s /usr/lib/sqoop/lib/postgresql-connector.jar /usr/hdp/current/sqoop-client/lib/postgresql-connector.jar
+
 #### Data import
 
 Then I moved to the dw project folder and run the import command. Running the command as root was necessary due to some problems with hadoop filesystem permissions
