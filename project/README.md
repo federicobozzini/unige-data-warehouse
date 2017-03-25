@@ -596,7 +596,7 @@ Then I installed wget, in order to be able to get the necessary packages
 
 Next step was to follow [the Sqoop installation tutorial](https://docs.hortonworks.com/HDPDocuments/HDP2/HDP-2.4.2/bk_installing_manually_book/content/install_sqoop_rpms.html) and add the Sqoop repository and install the Debian package
 
-    wget http://public-repo-1.hortonworks.com/HDP/debian7/2.x/updates/2.4.2.0/hdp.list -O etc/apt/sources.list.d/hdp.list
+    wget http://public-repo-1.hortonworks.com/HDP/debian7/2.x/updates/2.4.2.0/hdp.list -O /etc/apt/sources.list.d/hdp.list
 
     apt-get update
 
@@ -606,19 +606,15 @@ Sqoop was ready to use on the container, but the Postgresql drivers were missing
 
     curl -L "https://jdbc.postgresql.org/download/postgresql-42.0.0.jar" -o postgresql-connector.jar
 
-    mv postgresql-connector.jar /usr/lib/sqoop/lib
+    mv postgresql-connector.jar /var/lib/sqoop/
 
-    ln -s /usr/lib/sqoop/lib/postgresql-connector.jar /usr/hdp/current/sqoop-client/lib/postgresql-connector.jar
+    ln -s /var/lib/sqoop/postgresql-connector.jar /usr/hdp/current/sqoop-client/lib/postgresql-connector.jar
 
 #### Data import
 
-Then I moved to the dw project folder and run the import command. Running the command as root was necessary due to some problems with hadoop filesystem permissions
+To import the data into hive I created the script hiveInit.sh that uses sqoop. It must be run by the root user, to overcome some issues with the hadoop file system permissions.
 
-    cd /home/student/share
-
-    sqoop import-all-tables --connect jdbc:postgresql://localhost:5432/Adventureworks --username student --password foobar --outdir hive --bindir hive --warehouse-dir hive/warehouse --hive-import --hive-overwrite -- --schema=rolap
-
-The data were then imported on Hive.
+    ./hiveInit.sh
 
 ### Workload in Hive
 
@@ -627,6 +623,8 @@ I made thhe queries of the workload work in Hive with only some small tweaks. Th
 The Hive queries are not reported here since they are very similar to the original ones. They can be found in the hiveQueries.sql file.
 
 ### Olap queries in Hive
+
+To run the query just open a hive session and paste the queries.
 
 #### q10 in Hive
 
