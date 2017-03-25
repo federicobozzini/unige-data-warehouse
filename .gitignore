@@ -1,8 +1,8 @@
 .vscode/
-dbData/*
-!dbData/.gitkeep
-dbInit.sql
-hive/*
-!hive/.gitkeep
-metastore_db/
-derby.log
+project/dbData/*
+project/!dbData/.gitkeep
+project/dbInit.sql
+project/hive/*
+project/!hive/.gitkeep
+project/metastore_db/
+project/derby.log
