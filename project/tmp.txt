@@ -1,0 +1,81 @@
+select * from sales.salesorderheader s join sales.currencyrate c on s.currencyrateid = c.currencyrateid where c.fromcurrencycode <> 'USD'
+
+select distinct c.tocurrencycode from sales.currencyrate c where exists (select * from sales.salesorderheader s where s.currencyrateid = c.currencyrateid) and c.tocurrencycode <> 'USD'
+
+select count(*) from sales.salesorderheader where currencyrateid is null;
+
+select count(*) from production.product;
+
+select extract(year from orderdate) as year, count(*) as orders from sales.salesorderheader group by year;
+
+select min(orderdate) from sales.salesorderheader;
+
+select max(orderdate) - min(orderdate) from sales.salesorderheader;
+
+select count(*) from sales.customer;
+
+select count(*) from sales.salesperson;
+
+select count(*) from sales.currency;
+
+select count(distinct (a.city || ', ' || s.stateprovincecode))
+from person.address a
+join person.stateprovince s on a.stateprovinceid = s.stateprovinceid;
+
+
+
+select c.name as country, 
+    sm.name as shipmethod,
+    round(100.0 * sum(sum (quantity)) over (partition by c.name, sm.name)/ sum(sum (quantity)) over (partition by c.name), 2) 
+from rolap.salebycountry s
+join rolap.country c on s.countryid = c.countryid
+join rolap.shipmethod sm on s.shipmethodid = sm.shipmethodid
+group by c.name, sm.name
+order by c.name, sm.name;
+
+select c.name, sm.name, quantity, sum (quantity) over (partition by c.name, sm.name) 
+from rolap.salebycountry s
+join rolap.country c on s.countryid = c.countryid
+join rolap.shipmethod sm on s.shipmethodid = sm.shipmethodid
+order by c.name, sm.name;
+
+
+
+
+select tmp.country as country, 
+    tmp.shipmethod as shipmethod,
+    round(100.0 * sum(sumquantity) over (partition by tmp.country, tmp.shipmethod)/ sum(sumquantity) over (partition by tmp.country), 2) 
+from (
+    select c.name as country, 
+        sm.name as shipmethod,
+        sum(s.quantity) as sumquantity
+    from rolap.salebycountry s
+    join rolap.country c on s.countryid = c.countryid
+    join rolap.shipmethod sm on s.shipmethodid = sm.shipmethodid
+    group by c.name, sm.name
+    order by c.name, sm.name
+    ) tmp;
+
+
+
+
+su - root
+
+apt-get update
+apt-get install wget
+wget http://public-repo-1.hortonworks.com/HDP/debian7/2.x/updates/2.4.2.0/hdp.list -O /etc/apt/sources.list.d/hdp.list
+apt-get update
+apt-get install sqoop
+
+cd /tmp
+curl -L "https://jdbc.postgresql.org/download/postgresql-42.0.0.jar" -o postgresql-connector.jar
+mv postgresql-connector.jar /usr/lib/sqoop/lib
+
+ln -s /usr/lib/sqoop/lib/postgresql-connector.jar /usr/hdp/current/sqoop-client/lib/
+
+
+sqoop-list-tables --connect jdbc:postgresql://localhost:5432/Adventureworks --username student --password foobar -- --schema=rolap
+
+
+sqoop list-databases --connect 'jdbc:postgresql://localhost:5432/' --username student --password foobar
+
