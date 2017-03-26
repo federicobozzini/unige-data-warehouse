@@ -822,3 +822,120 @@ Calculate the 3 top selling bike, per year
     ) tmp
     where position <= 3
     order by year, quantitysold desc;
+
+## SparkSQL
+
+All the queries are in the file sparkQueries.java
+
+To run the file just use the command
+
+    ./sparkRun.sh
+
+### Workload in spark
+
+A brief summary is shown here for every query, the details can be read in the sparkQueries.java file.
+
+#### q1 in Spark
+
+    saleCategoryYearDF
+    .join(categoryDF, "categoryId")
+    .join(yearDF, "yearId")
+    .filter("year=2013 AND category='Bikes'")
+    .agg(round(sum(col("revenue")), 2).as("totrevenue"));
+
+#### q2 in Spark
+
+    saleCategoryYearDF
+    .join(categoryDF, "categoryId")
+    .join(yearDF, "yearId")
+    .groupBy(col("category"), col("year"))
+    .agg(round(sum(col("revenue")), 2).as("totrevenue"))
+    .sort(col("category"), col("year"));
+
+#### q3 in Spark
+
+    saleCountryDF
+    .join(dateDF, "dateId")
+    .join(countryDF, "countryId")
+    .join(productDF, "productId")
+    .filter(col("country.name").equalTo("United Kingdom"))
+    .filter(col("datet.datets").between("2012-12-18", "2012-12-25"))
+    .groupBy(col("product.exid"), col("product.name"))
+    .agg(round(sum(col("revenue")), 2).as("totrevenue"))
+    .where(col("totrevenue").geq(1500))
+    .select(col("product.exid"), col("product.name"));
+
+#### q4 in Spark
+
+    saleDF
+    .join(cityDF, "cityId")
+    .join(countryDF, "countryId")
+    .join(productDF, "productId")
+    .join(dateDF, "dateId")
+    .join(yearDF, "yearId")
+    .filter("year=2013 AND product.name='Mountain-200 Silver, 42'")
+    .groupBy(col("datet.datets"), col("city.name"))
+    .agg(sum(col("quantity")).as("numsold"))
+    .where(col("numsold").geq(8))
+    .sort(col("city.name"))
+    .select(col("city.name")).as("city")
+    .distinct();
+
+#### q5 in Spark
+
+    saleCountryDF
+    .join(currencyDF, "currencyId")
+    .join(productDF, "productId")
+    .join(dateDF, "dateId")
+    .join(yearDF, "yearId")
+    .groupBy(col("currencycode"), col("year"))
+    .agg(round(sum(col("revenue")), 2).as("totrevenue"))
+    .sort(col("currencycode"), col("year"));
+
+#### q6 in Spark
+
+    saleCountryDF
+    .join(countryDF, "countryId")
+    .join(shipmethodDF, "shipmethodId")
+    .groupBy(col("country.name"), col("shipmethod.name"))
+    .agg(sum(col("quantity")).as("numsold"))
+    .sort(col("country.name"), col("shipmethod.name"));
+
+#### q7 in Spark
+
+    saleCategoryYearDF
+    .join(categoryDF, "categoryId")
+    .join(yearDF, "yearId")
+    .join(customerDF, "customerId")
+    .join(salespersonDF, "salespersonId")
+    .filter("salesperson.name <> 'no salesperson' AND category='Bikes'")
+    .groupBy(col("year"), col("salesperson.name"))
+    .agg(sum(col("quantity")).as("bikesold"))
+    .sort(col("year"), col("bikesold").desc());
+
+#### q8 in Spark
+
+    saleCategoryYearDF
+    .join(cityDF, "cityId")
+    .join(countryDF, "countryId")
+    .join(categoryDF, "categoryId")
+    .join(yearDF, "yearId")
+    .join(customerDF, "customerId")
+    .filter("customer.store <> 'no store' AND category='Bikes'")
+    .groupBy(col("year"), col("customer.store"))
+    .agg(sum(col("quantity")).as("bikesold"))
+    .where("bikesold >= 200")
+    .sort(col("year"), col("bikesold").desc());
+
+#### q9 in Spark
+
+    saleCategoryYearDF
+    .join(cityDF, "cityId")
+    .join(countryDF, "countryId")
+    .join(categoryDF, "categoryId")
+    .join(customerDF, "customerId")
+    .filter("customer.store <> 'no store' AND category='Bikes'")
+    .groupBy(col("customer.store"))
+    .agg(sum(col("quantity")).as("bikesold"))
+    .where("bikesold >= 200")
+    .sort(col("bikesold").desc());

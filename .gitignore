@@ -6,6 +6,8 @@ project/hive/*
 project/!hive/.gitkeep
 project/metastore_db/
 project/derby.log
+project/sparkqueries.jar
+project/SparkQueries.class
 exercise0SparkSql/sparksql.jar
 exercise0SparkSql/SparkSql.class
 metastore_db/
