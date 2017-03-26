@@ -36,22 +36,26 @@ having sum(s.revenue) >= 1500;
 
 -- q4 Sale[product='Mountain-200 Silver, 42', date, year=2013, quantity>=5].city
 
-select d.datets, c.name as city
-from sale s
-join product p on s.productid = p.productid
-join datet d on s.dateid = d.dateid
-join year y on d.yearid = y.yearid
-join city c on s.cityid = c.cityid
-where p.name = 'Mountain-200 Silver, 42'
-and year = 2013
-group by d.datets, c.name
-having sum(s.quantity) >= 5;
+select distinct city
+from (
+    select c.name as city
+    from sale s
+    join product p on s.productid = p.productid
+    join datet d on s.dateid = d.dateid
+    join year y on d.yearid = y.yearid
+    join city c on s.cityid = c.cityid
+    where p.name = 'Mountain-200 Silver, 42'
+    and year = 2013
+    group by d.datets, c.name
+    having sum(s.quantity) >= 8
+    order by city
+) tmp;
 
 
 -- q5 Sales[currency, year].revenue
 
 select c.currencycode, y.year, round(sum(revenue),2)
-from sale s
+from salebycountry s
 join datet d on s.dateid = d.dateid
 join year y on d.yearid = y.yearid
 join currency c on s.currencyid = c.currencyid
@@ -72,15 +76,16 @@ order by c.name, sm.name;
 
 select y.year as year,
     sp.name as fullname,
-    round(sum(s.revenue),2) as bikesold
+    sum(s.quantity) as bikesold
 from salebyyearandcategory s
 join year y on s.yearid = y.yearid
 join category c on s.categoryid = c.categoryid
 join customer cu on s.customerid = cu.customerid
 join salesperson sp on cu.salespersonid = sp.salespersonid
 where sp.name <> 'no salesperson'
-group by y.year, sp.name
-order by y.year, bikesold desc;
+and c.category = 'Bikes'
+group by year, sp.name
+order by year, bikesold desc;
 
 
 -- q8 Sale[year, store, category='Bikes', quantity>=200].quantity

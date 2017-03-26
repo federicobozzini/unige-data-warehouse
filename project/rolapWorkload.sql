@@ -33,9 +33,9 @@ group by p.exid, p.name
 having sum(s.revenue) >= 1500;
 
 
--- q4 Sale[product='Mountain-200 Silver, 42', date, year=2013, quantity>=5].city
+-- q4 Sale[product='Mountain-200 Silver, 42', date, year=2013, quantity>=8].city
 
-select d.datets, c.name as city
+select distinct c.name as city
 from rolap.sale s
 join rolap.product p on s.productid = p.productid
 join rolap.datet d on s.dateid = d.dateid
@@ -44,13 +44,14 @@ join rolap.city c on s.cityid = c.cityid
 where p.name = 'Mountain-200 Silver, 42'
 and year = 2013
 group by d.datets, c.name
-having sum(s.quantity) >= 5;
+having sum(s.quantity) >= 8
+order by city;
 
 
 -- q5 Sales[currency, year].revenue
 
 select c.currencycode, y.year, sum(revenue)
-from rolap.sale s
+from rolap.salebycountry s
 join rolap.datet d on s.dateid = d.dateid
 join rolap.year y on d.yearid = y.yearid
 join rolap.currency c on s.currencyid = c.currencyid
@@ -71,13 +72,14 @@ order by c.name, sm.name;
 
 select y.year as year,
     sp.name as fullname,
-    sum(s.revenue) as bikesold
+    sum(s.quantity) as bikesold
 from rolap.salebyyearandcategory s
 join rolap.year y on s.yearid = y.yearid
 join rolap.category c on s.categoryid = c.categoryid
 join rolap.customer cu on s.customerid = cu.customerid
 join rolap.salesperson sp on cu.salespersonid = sp.salespersonid
 where sp.name <> 'no salesperson'
+and c.category = 'Bikes'
 group by y.year, fullname
 order by y.year, bikesold desc;
 

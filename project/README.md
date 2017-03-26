@@ -53,7 +53,6 @@ Here I present an overview of the dimensions of the Sale fact:
 
 Customer and City share the country attribute.
 
----
 ##### Dynamicity
 
 Product and its categorization may be dynamic. There may be a change in how a product is classified but this should happen quite unfrequently.
@@ -124,11 +123,11 @@ Sale[date>=18/12/2012 AND date<=25/12/2012, revenue> 200, country='UK'].product
 
 #### q4
 
-The list of all cities where the product 'Mountain-200 Silver, 42' has been sold at least 5 times in the same date in 2013
+The list of all cities where the product 'Mountain-200 Silver, 42' has been sold at least 8 times in the same date in 2013
 
 Sale[product='Mountain-200 Silver, 42', date, year=2013, quantity>=5].city
 
-    select distinct h.orderdate, (a.city || ', ' || s.stateprovincecode) as city
+    select (a.city || ', ' || s.stateprovincecode) as city
     from production.product p 
     right join sales.salesorderdetail d on p.productid = d.productid 
     join sales.salesorderheader h on h.salesorderid = d.salesorderid
@@ -138,7 +137,7 @@ Sale[product='Mountain-200 Silver, 42', date, year=2013, quantity>=5].city
     where p.name = 'Mountain-200 Silver, 42'
     and extract(year from h.orderdate) = 2013
     group by city, s.stateprovincecode, h.orderdate
-    having sum(d.orderqty) >= 5;
+    having sum(d.orderqty) >= 8;
 
 #### q5
 
@@ -344,7 +343,7 @@ I assume here that the name value of the different dimension attributes is alway
 
 The queries rewritten to use the rolap model:
 
-#### q1
+#### q1 in the dw
 
 The sum of all revenues for the year 2013 for the product category "Bikes"
 
@@ -357,7 +356,7 @@ Sale[category = 'Bikes', year=2013].revenue
     where y.year = 2013
     and c.category = 'Bikes';
 
-#### q2
+#### q2 in the dw
 
 The list of the sums of all revenues for all the years divided by product category
 
@@ -372,7 +371,7 @@ Sale[category, year].revenue
     group by c.category, y.year
     order by c.category, y.year;
 
-#### q3
+#### q3 in the dw
 
 The list of all products of X category that generated a revenue greater than 200 during the week before Christmas of 2012 in the UK
 
@@ -388,13 +387,13 @@ Sale[date>=18/12/2012 AND date<=25/12/2012, revenue> 200, country='UK'].product
     group by p.exid, p.name
     having sum(s.revenue) >= 1500;
 
-#### q4
+#### q4 in the dw
 
 The list of all cities where the product 'Mountain-200 Silver, 42' has been sold at least 5 times in the same date in 2013
 
 Sale[product='Mountain-200 Silver, 42', date, year=2013, quantity>=5].city
 
-    select d.datets, c.name as city
+    select distinct c.name as city
     from rolap.sale s
     join rolap.product p on s.productid = p.productid
     join rolap.datet d on s.dateid = d.dateid
@@ -403,22 +402,23 @@ Sale[product='Mountain-200 Silver, 42', date, year=2013, quantity>=5].city
     where p.name = 'Mountain-200 Silver, 42'
     and year = 2013
     group by d.datets, c.name
-    having sum(s.quantity) >= 5;
+    having sum(s.quantity) >= 8
+    order by city;
 
-#### q5
+#### q5 in the dw
 
 The average revenue for all the currencies by year
 
 Sale[currency, year].revenue
 
     select c.currencycode, y.year, sum(revenue)
-    from rolap.sale s
+    from rolap.salebycountry s
     join rolap.datet d on s.dateid = d.dateid
     join rolap.year y on d.yearid = y.yearid
     join rolap.currency c on s.currencyid = c.currencyid
     group by c.currencycode, y.year;
 
-#### q6
+#### q6 in the dw
 
 Quantity of product sent by shipping method for every country
 
@@ -431,7 +431,7 @@ Sale[country, ship-method].quantity
     group by c.name, sm.name
     order by c.name, sm.name;
 
-#### q7
+#### q7 in the dw
 
 Quantity of bikes sold every year by every sales person.
 
@@ -439,17 +439,18 @@ Sale[year, salesperson, category='Bikes'].quantity
 
     select y.year as year,
         sp.name as fullname,
-        sum(s.revenue) as bikesold
+        sum(s.quantity) as bikesold
     from rolap.salebyyearandcategory s
     join rolap.year y on s.yearid = y.yearid
     join rolap.category c on s.categoryid = c.categoryid
     join rolap.customer cu on s.customerid = cu.customerid
     join rolap.salesperson sp on cu.salespersonid = sp.salespersonid
     where sp.name <> 'no salesperson'
+    and c.category = 'Bikes'
     group by y.year, fullname
     order by y.year, bikesold desc;
 
-#### q8
+#### q8 in the dw
 
 Quantity of bikes sold per year in every store which sold at least 200
 
@@ -468,7 +469,7 @@ Sale[year, store, category='Bikes', quantity>=200].quantity
     having sum(quantity) >= 200
     order by y.year, bikesold desc;
 
-#### q9
+#### q9 in the dw
 
 Quantity of bikes sold in every store which sold at least 200
 

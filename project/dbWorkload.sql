@@ -41,9 +41,9 @@ group by country.countryregioncode, p.productid, p.name
 having sum(d.unitprice * (1 - d.unitpricediscount) * d.orderqty * coalesce(c.averagerate, 1)) >= 1500;
 
 
--- q4 Sale[product='Mountain-200 Silver, 42', date, year=2013, quantity>=5].city
+-- q4 Sale[product='Mountain-200 Silver, 42', date, year=2013, quantity>=8].city
 
-select distinct h.orderdate, (a.city || ', ' || s.stateprovincecode) as city
+select distinct (a.city || ', ' || s.stateprovincecode) as city
 from production.product p 
 right join sales.salesorderdetail d on p.productid = d.productid 
 join sales.salesorderheader h on h.salesorderid = d.salesorderid
@@ -53,7 +53,7 @@ join person.stateprovince s on a.stateprovinceid = s.stateprovinceid
 where p.name = 'Mountain-200 Silver, 42'
 and extract(year from h.orderdate) = 2013
 group by city, s.stateprovincecode, h.orderdate
-having sum(d.orderqty) >= 5;
+having sum(d.orderqty) >= 8;
 
 
 -- q5 Sales[currency, year].revenue
