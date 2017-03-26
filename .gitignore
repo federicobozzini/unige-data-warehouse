@@ -8,3 +8,5 @@ project/metastore_db/
 project/derby.log
 exercise0SparkSql/sparksql.jar
 exercise0SparkSql/SparkSql.class
+/metastore_db
+/*.zip
