@@ -832,9 +832,9 @@ To run the file just use the command
 
     ./sparkRun.sh
 
-### Workload in spark
-
 A brief summary is shown here for every query, the details can be read in the sparkQueries.java file.
+
+### Workload in spark
 
 #### q1 in Spark
 
@@ -940,3 +940,151 @@ A brief summary is shown here for every query, the details can be read in the sp
     .agg(sum(col("quantity")).as("bikesold"))
     .where("bikesold >= 200")
     .sort(col("bikesold").desc());
+
+### OLAP queries in spark
+
+#### q10 in Spark
+
+    WindowSpec q10w1 = Window.partitionBy("country", "shipmethod");
+    WindowSpec q10w2 = Window.partitionBy("country");
+    Column percentage = round(sum("numshipped").over(q10w1).divide(sum("numshipped").over(q10w2)).multiply(100),2).as("percentage");
+
+    q6
+    .sort("country", "shipmethod")
+    .select(col("country"), col("shipmethod"), percentage)
+
+#### q11 in Spark
+
+    Dataset<Row> q11tmp = saleCategoryYearDF
+        .join(customerDF, "customerId")
+        .filter("customer.store <> 'no store'")
+        .groupBy("store")
+        .agg(round(sum("revenue"),2).as("totrevenue"))
+        .select("store", "totrevenue")
+        .sort(col("totrevenue").desc());
+    Column surplus = round(col("totrevenue").minus(avg("totrevenue").over(emptyWindow)), 2).as("surplus");
+    WindowSpec q11w = Window.orderBy(col("totrevenue").desc());
+    Column storeRank = rank().over(q11w).as("storeRank");
+
+    q11tmp
+    .select(col("store"), col("totrevenue"), surplus, storeRank)
+    .limit(5);
+
+#### q12 in Spark
+
+    Dataset<Row> q12tmp = saleCategoryYearDF
+        .join(customerDF, "customerid")
+        .join(salespersonDF, "salespersonid")
+        .filter("salesperson.name <> 'no salesperson'")
+        .groupBy("salesperson.name", "salespersonid")
+        .agg(round(sum("revenue"),2).as("totrevenue"))
+        .sort(col("totrevenue").desc())
+        .select(col("salesperson.name").as("salesperson"), col("salespersonid"), col("totrevenue"))
+        .limit(3);
+    WindowSpec q12w = Window.partitionBy("salesperson").orderBy(col("totrevenue").desc(), col("year")).rowsBetween(Long.MIN_VALUE, 0);
+
+    q12tmp
+    .join(customerDF, "salespersonid")
+    .join(saleCategoryYearDF, "customerid")
+    .join(yearDF, "yearId")
+    .groupBy("year", "salesperson", "totrevenue")
+    .agg(round(sum("revenue"),2).as("yearrevenue"), round(sum(sum("revenue")).over(q12w),2).as("partialtot"))
+    .sort(col("totrevenue").desc(), col("year"));
+
+#### q13 in Spark
+
+    saleCategoryYearDF
+        .join(cityDF, "cityid")
+        .filter("city.name <> 'no city'")
+        .groupBy("cityid", "city.name")
+        .agg(round(sum("revenue"),2).as("totrevenue"))
+        .sort(col("totrevenue").desc())
+        .select(col("cityid"), col("city.name").as("city"), col("totrevenue"))
+        .limit(1);
+    WindowSpec q13w = Window.partitionBy("city").orderBy(col("totrevenue").desc(), col("month")).rowsBetween(-3, 0);
+
+    q13tmp
+    .join(saleDF, "cityid")
+    .join(dateDF, "dateid")
+    .groupBy("month", "city", "totrevenue")
+    .agg(round(sum("revenue"),2).as("monthlyrevenue"), round(sum(sum("revenue")).over(q13w),2).as("partialtot"))
+    .sort("month")
+    .select("month", "city", "monthlyrevenue", "partialtot");
+
+### HIVE queries in spark
+
+#### q14 in Spark
+
+    saleCountryDF
+    .join(dateDF, "dateid")
+    .join(yearDF, "yearId")
+    .join(countryDF, "countryId")
+    .filter("country.name == 'United States'")
+    .groupBy("year")
+    .agg(round(sum("revenue"),2).as("totrevenue"))
+    .sort(col("totrevenue").desc())
+    .select("year", "totrevenue")
+    .limit(1);
+
+#### q15 in Spark
+
+    saleCategoryYearDF
+    .join(yearDF, "yearId")
+    .join(cityDF, "cityid")
+    .join(countryDF, "countryid")
+    .join(customerDF, "customerid")
+    .join(categoryDF, "categoryid")
+    .filter("country.name == 'United States' and customer.store <> 'no store' and category='Bikes'")
+    .groupBy("store", "year")
+    .agg(round(sum("quantity"),2).as("bikesold"))
+    .groupBy("year")
+    .agg(round(avg("bikesold"),0).as("avgbikesold"))
+    .sort("year");
+
+#### q16 in Spark
+
+    saleCategoryYearDF
+    .join(yearDF, "yearId")
+    .join(customerDF, "customerid")
+    .join(categoryDF, "categoryid")
+    .filter("customer.store <> 'no store' and category='Bikes'")
+    .groupBy("store", "year")
+    .agg(round(sum("quantity"),2).as("bikesold"))
+    .groupBy("year", "store", "bikesold")
+    .agg(rank().over(q16w).as("position"))
+    .filter("position = 1")
+    .sort("year")
+    .select("year", "store", "bikesold");
+
+#### q17 in Spark
+
+    WindowSpec q17w = Window.partitionBy("year").orderBy(col("bikesold").desc());
+    Dataset<Row> q17tmp = saleCountryDF
+        .join(countryDF, "countryid")
+        .groupBy("name")
+        .agg(round(sum("revenue"),2).as("totrevenue"));
+    double[] quantiles = {0.5};
+    Double median = q17tmp.stat().approxQuantile("totrevenue", quantiles, 0)[0];
+
+    q17tmp
+        .filter(col("totrevenue").geq(median));
+
+#### q18 in Spark
+
+
+    WindowSpec q18w = Window.partitionBy("year").orderBy(col("bikesold").desc());
+
+    saleCountryDF
+    .join(countryDF, "countryid")
+    .join(dateDF, "dateid")
+    .join(yearDF, "yearId")
+    .join(productDF, "productid")
+    .join(categoryDF, "categoryid")
+    .filter("category='Bikes'")
+    .groupBy("product.name", "year")
+    .agg(sum(col("quantity")).as("bikesold"))
+    .groupBy("year", "product.name", "bikesold")
+    .agg(rank().over(q18w).as("position"))
+    .filter("position <= 3")
+    .sort(col("year"), col("bikesold").desc())
+    .select(col("year"), col("product.name").as("product"), col("bikesold"));

@@ -5,10 +5,16 @@ import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.Column;
 import org.apache.spark.sql.SparkSession;
 import static org.apache.spark.sql.functions.col;
 import static org.apache.spark.sql.functions.sum;
+import static org.apache.spark.sql.functions.avg;
 import static org.apache.spark.sql.functions.round;
+import static org.apache.spark.sql.functions.rank;
+import org.apache.spark.sql.expressions.Window;
+import org.apache.spark.sql.expressions.WindowSpec;
+import java.lang.Long;
 
 
 public class SparkQueries {
@@ -100,8 +106,9 @@ public class SparkQueries {
             .join(countryDF, "countryId")
             .join(shipmethodDF, "shipmethodId")
             .groupBy(col("country.name"), col("shipmethod.name"))
-            .agg(sum(col("quantity")).as("numsold"))
-            .sort(col("country.name"), col("shipmethod.name"));
+            .agg(sum(col("quantity")).as("numshipped"))
+            .sort(col("country.name"), col("shipmethod.name"))
+            .select(col("country.name").as("country"), col("shipmethod.name").as("shipmethod"), col("numshipped"));
 
         results.put("q6", q6);
 
@@ -143,6 +150,147 @@ public class SparkQueries {
             .sort(col("bikesold").desc());
 
         results.put("q9", q9);
+
+        WindowSpec emptyWindow = Window.partitionBy();
+
+        WindowSpec q10w1 = Window.partitionBy("country", "shipmethod");
+        WindowSpec q10w2 = Window.partitionBy("country");
+        Column percentage = round(sum("numshipped").over(q10w1).divide(sum("numshipped").over(q10w2)).multiply(100),2).as("percentage");
+        Dataset<Row> q10 = q6
+            .sort("country", "shipmethod")
+            .select(col("country"), col("shipmethod"), percentage);
+
+        results.put("q10", q10);
+
+        Dataset<Row> q11tmp = saleCategoryYearDF
+            .join(customerDF, "customerId")
+            .filter("customer.store <> 'no store'")
+            .groupBy("store")
+            .agg(round(sum("revenue"),2).as("totrevenue"))
+            .select("store", "totrevenue")
+            .sort(col("totrevenue").desc());
+        Column surplus = round(col("totrevenue").minus(avg("totrevenue").over(emptyWindow)), 2).as("surplus");
+        WindowSpec q11w = Window.orderBy(col("totrevenue").desc());
+        Column storeRank = rank().over(q11w).as("storeRank");
+        Dataset<Row> q11 = q11tmp
+            .select(col("store"), col("totrevenue"), surplus, storeRank)
+            .limit(5);
+
+        results.put("q11", q11);
+
+        Dataset<Row> q12tmp = saleCategoryYearDF
+            .join(customerDF, "customerid")
+            .join(salespersonDF, "salespersonid")
+            .filter("salesperson.name <> 'no salesperson'")
+            .groupBy("salesperson.name", "salespersonid")
+            .agg(round(sum("revenue"),2).as("totrevenue"))
+            .sort(col("totrevenue").desc())
+            .select(col("salesperson.name").as("salesperson"), col("salespersonid"), col("totrevenue"))
+            .limit(3);
+        WindowSpec q12w = Window.partitionBy("salesperson").orderBy(col("totrevenue").desc(), col("year")).rowsBetween(Long.MIN_VALUE, 0);
+        Dataset<Row> q12 = q12tmp
+            .join(customerDF, "salespersonid")
+            .join(saleCategoryYearDF, "customerid")
+            .join(yearDF, "yearId")
+            .groupBy("year", "salesperson", "totrevenue")
+            .agg(round(sum("revenue"),2).as("yearrevenue"), round(sum(sum("revenue")).over(q12w),2).as("partialtot"))
+            .sort(col("totrevenue").desc(), col("year"));
+
+        results.put("q12", q12);
+
+        Dataset<Row> q13tmp = saleCategoryYearDF
+            .join(cityDF, "cityid")
+            .filter("city.name <> 'no city'")
+            .groupBy("cityid", "city.name")
+            .agg(round(sum("revenue"),2).as("totrevenue"))
+            .sort(col("totrevenue").desc())
+            .select(col("cityid"), col("city.name").as("city"), col("totrevenue"))
+            .limit(1);
+        WindowSpec q13w = Window.partitionBy("city").orderBy(col("totrevenue").desc(), col("month")).rowsBetween(-3, 0);
+        Dataset<Row> q13 = q13tmp
+            .join(saleDF, "cityid")
+            .join(dateDF, "dateid")
+            .groupBy("month", "city", "totrevenue")
+            .agg(round(sum("revenue"),2).as("monthlyrevenue"), round(sum(sum("revenue")).over(q13w),2).as("partialtot"))
+            .sort("month")
+            .select("month", "city", "monthlyrevenue", "partialtot");
+
+        results.put("q13", q13);
+
+        Dataset<Row> q14 = saleCountryDF
+            .join(dateDF, "dateid")
+            .join(yearDF, "yearId")
+            .join(countryDF, "countryId")
+            .filter("country.name == 'United States'")
+            .groupBy("year")
+            .agg(round(sum("revenue"),2).as("totrevenue"))
+            .sort(col("totrevenue").desc())
+            .select("year", "totrevenue")
+            .limit(1);
+
+        results.put("q14", q14);
+
+        Dataset<Row> q15 = saleCategoryYearDF
+            .join(yearDF, "yearId")
+            .join(cityDF, "cityid")
+            .join(countryDF, "countryid")
+            .join(customerDF, "customerid")
+            .join(categoryDF, "categoryid")
+            .filter("country.name == 'United States' and customer.store <> 'no store' and category='Bikes'")
+            .groupBy("store", "year")
+            .agg(round(sum("quantity"),2).as("bikesold"))
+            .groupBy("year")
+            .agg(round(avg("bikesold"),0).as("avgbikesold"))
+            .sort("year");
+
+        results.put("q15", q15);
+
+        WindowSpec q16w = Window.partitionBy("year").orderBy(col("bikesold").desc());
+        Dataset<Row> q16 = saleCategoryYearDF
+            .join(yearDF, "yearId")
+            .join(customerDF, "customerid")
+            .join(categoryDF, "categoryid")
+            .filter("customer.store <> 'no store' and category='Bikes'")
+            .groupBy("store", "year")
+            .agg(round(sum("quantity"),2).as("bikesold"))
+            .groupBy("year", "store", "bikesold")
+            .agg(rank().over(q16w).as("position"))
+            .filter("position = 1")
+            .sort("year")
+            .select("year", "store", "bikesold");
+
+        results.put("q16", q16);
+
+        WindowSpec q17w = Window.partitionBy("year").orderBy(col("bikesold").desc());
+        Dataset<Row> q17tmp = saleCountryDF
+            .join(countryDF, "countryid")
+            .groupBy("name")
+            .agg(round(sum("revenue"),2).as("totrevenue"));
+        double[] quantiles = {0.5};
+        Double median = q17tmp.stat().approxQuantile("totrevenue", quantiles, 0)[0];
+        Dataset<Row> q17 = q17tmp
+            .filter(col("totrevenue").geq(median));
+
+        results.put("q17", q17);
+
+        WindowSpec q18w = Window.partitionBy("year").orderBy(col("bikesold").desc());
+        Dataset<Row> q18 = saleCountryDF
+            .join(countryDF, "countryid")
+            .join(dateDF, "dateid")
+            .join(yearDF, "yearId")
+            .join(productDF, "productid")
+            .join(categoryDF, "categoryid")
+            .filter("category='Bikes'")
+            .groupBy("product.name", "year")
+            .agg(sum(col("quantity")).as("bikesold"))
+            .groupBy("year", "product.name", "bikesold")
+            .agg(rank().over(q18w).as("position"))
+            .filter("position <= 3")
+            .sort(col("year"), col("bikesold").desc())
+            .select(col("year"), col("product.name").as("product"), col("bikesold"));
+
+        results.put("q18", q18);
+
 
         results.forEach((k,v) -> {
             System.out.println(k);
