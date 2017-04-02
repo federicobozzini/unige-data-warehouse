@@ -1071,7 +1071,6 @@ A brief summary is shown here for every query, the details can be read in the sp
 
 #### q18 in Spark
 
-
     WindowSpec q18w = Window.partitionBy("year").orderBy(col("bikesold").desc());
 
     saleCountryDF
@@ -1088,3 +1087,88 @@ A brief summary is shown here for every query, the details can be read in the sp
     .filter("position <= 3")
     .sort(col("year"), col("bikesold").desc())
     .select(col("year"), col("product.name").as("product"), col("bikesold"));
+
+### Additional Spark queries
+
+#### q19 in Spark
+
+Show the 3 top selling dates (by revenue) for each country
+
+    WindowSpec q19w = Window.partitionBy("country.name").orderBy(col("totrevenue").desc());
+
+    saleCountryDF
+    .join(countryDF, "countryid")
+    .join(dateDF, "dateid")
+    .groupBy("country.name", "datet.datets")
+    .agg(round(sum(col("revenue")),2).as("totrevenue"))
+    .groupBy("country.name", "datet.datets", "totrevenue")
+    .agg(rank().over(q19w).as("position"))
+    .filter("position <= 3")
+    .sort(col("country.name"));
+
+#### q20 in Spark
+
+Show the percentage of revenue for each day of the week
+
+    WindowSpec q20w = Window.partitionBy("dayofweek");
+
+    saleCountryDF
+        .join(countryDF, "countryid")
+        .join(dateDF, "dateid")
+        .groupBy(date_format(col("datet.datets"), "u").as("dayofweeknum"), date_format(col("datet.datets"), "E").as("dayofweek"))
+        .agg(round(sum("revenue"),2).as("totrevenue"))
+        .groupBy("dayofweek", "dayofweeknum", "totrevenue")
+        .agg(round(sum("totrevenue").over(q20w).divide(sum("totrevenue").over(emptyWindow)).multiply(100),2).as("percentage"))
+        .sort("dayofweeknum")
+        .select("dayofweek", "percentage");
+
+#### q21 in Spark
+
+Show the top five cities by revenue
+
+    saleCategoryYearDF
+    .join(cityDF, "cityid")
+    .groupBy("city.name")
+    .agg(round(sum("revenue"),2).as("totrevenue"))
+    .sort(col("totrevenue").desc())
+    .limit(5);
+
+#### q22 in Spark
+
+Show the 3 top selling items for each product category
+
+    q22w = Window.partitionBy("category").orderBy(col("totrevenue").desc());
+
+    saleCountryDF
+        .join(productDF, "productid")
+        .join(categoryDF, "categoryid")
+        .groupBy(col("product.name").as("product"), col("category.category"))
+        .agg(round(sum("revenue"),2).as("totrevenue"))
+        .groupBy("category", "product", "totrevenue")
+        .agg(rank().over(q22w).as("rank"))
+        .filter("rank <= 3");
+
+#### q23 in Spark
+
+Show the 4 top selling items for the 4 customers that produced more revenue
+
+    WindowSpec q23w1 = Window.partitionBy().orderBy(col("totrevenue").desc());
+    WindowSpec q23w2 = Window.partitionBy("store").orderBy(col("totquantity").desc());
+
+    saleDF
+    .join(customerDF, "customerid")
+    .filter("store <> 'no store'")
+    .groupBy("customer.store")
+    .agg(round(sum("revenue"),2).as("totrevenue"))
+    .groupBy("store", "totrevenue")
+    .agg(rank().over(q23w1).as("customer_rank"))
+    .filter("customer_rank <= 4")
+    .join(customerDF, "store")
+    .join(saleDF, "customerid")
+    .join(productDF, "productid")
+    .groupBy(col("product.name").as("product"), col("store"))
+    .agg(sum("quantity").as("totquantity"))
+    .groupBy("store", "product", "totquantity")
+    .agg(rank().over(q23w2).as("product_rank"))
+    .filter("product_rank <= 4");
+    
