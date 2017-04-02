@@ -583,33 +583,15 @@ I decided to import the data from Postgresql to Hive by using a tool designed fo
 
 The first step was to install sqoop.
 
-Here I present a short description of the necessary steps to install Sqoop on the docker container.
+To install sqoop I've create the hiveSqoopInstall.sh script.
 
-I started by loggin in as root:
+In order to use this script it's necessary to be logged as root:
 
     su - root
 
-Then I installed wget, in order to be able to get the necessary packages
+    cd /home/student/share/project
 
-    apt-get update
-
-    apt-get install wget
-
-Next step was to follow [the Sqoop installation tutorial](https://docs.hortonworks.com/HDPDocuments/HDP2/HDP-2.4.2/bk_installing_manually_book/content/install_sqoop_rpms.html) and add the Sqoop repository and install the Debian package
-
-    wget http://public-repo-1.hortonworks.com/HDP/debian7/2.x/updates/2.4.2.0/hdp.list -O /etc/apt/sources.list.d/hdp.list
-
-    apt-get update
-
-    apt-get install sqoop
-
-Sqoop was ready to use on the container, but the Postgresql drivers were missing. To get them
-
-    curl -L "https://jdbc.postgresql.org/download/postgresql-42.0.0.jar" -o postgresql-connector.jar
-
-    mv postgresql-connector.jar /var/lib/sqoop/
-
-    ln -s /var/lib/sqoop/postgresql-connector.jar /usr/hdp/current/sqoop-client/lib/postgresql-connector.jar
+    ./hiveSqoopInstall.sh
 
 #### Data import
 
@@ -693,7 +675,7 @@ This query had some ordering problems and I needed to add an additional query to
 
 #### q13 in Hive
 
-    select d.month, 
+    select d.month,
         city, 
         sum(revenue) as revenue,
         round(sum(sum(revenue)) over (partition by city order by totrevenue desc, d.month rows 3 preceding), 2) as totrevenue
@@ -720,7 +702,7 @@ This query is almost identical to the original olap query q13.
 Calculate the year with the total highest revenue in the USA
 
     select year, round(sum(revenue),2) as totrevenue
-    from salebycountry s 
+    from salebycountry s
     join country c on s.countryid = c.countryid
     join datet d on s.dateid = d.dateid
     join year y on d.yearid = y.yearid
@@ -1171,4 +1153,3 @@ Show the 4 top selling items for the 4 customers that produced more revenue
     .groupBy("store", "product", "totquantity")
     .agg(rank().over(q23w2).as("product_rank"))
     .filter("product_rank <= 4");
-    
