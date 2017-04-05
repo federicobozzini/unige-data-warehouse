@@ -1242,3 +1242,117 @@ With this chart the intention is to understand how the total revenues changes wh
 Apparantly Monday and Wednesday are the best-performing day of the week, and Friday the worst one. The weekend features a below average results contrary of what some people may think without having the data.
 
 This information can possibly be exploited in future discounts and promotions.
+
+## Short explanation of the files and folders included in the project
+
+### ../docker-compose.yml
+
+The docker-compose file with all the information needed to run the docker image of the project.
+
+### AdventureWorkdsDB/
+
+The folder containing the initial csv files.
+
+### dbData/
+
+The folder containing the corrected csv files. It's generate by the idbInit.sh script.
+
+### draw.io/
+
+The folder containing the files used to generate the images of the rolap schema. These files can be used on the [draw.io website](draw.io).
+
+### hive/
+
+The folder containing all the files and folder generated from the hive data import.
+
+### images/
+
+The folder containing all the images used for the project.
+
+### indyco/
+
+The folder contaning the files used to generate the fact schema with the DFM notation.
+
+### tableau/
+
+The folder containing the files used for Tableau.
+
+### AdventureworkdsDB.sql
+
+A file containing the initial sql schema (and data import from CSV) of the database.
+
+### AdventureWorksDBDiagram.pdf
+
+The file containing a diagram of the Adventureworks database.
+
+### dbConnect.sh
+
+A file used to connect to the DBMS using the Adventureworks database.
+
+### dbInit.sh
+
+The first file to launch to initialize the database and import the data
+
+### dbInit.sql
+
+A file generate by the script dbInit.sh. It's a modified version of AdventureworkdsDB.sql that prevents some errors from occuring.
+
+### dbWorload.sql
+
+The implementation of the workload with the original Adventureworks database
+
+### dw1617=projectAssignment-v0.pdf
+
+The project instructions.
+
+### hiveInit.sh
+
+The script that imports the datawarehouse into hive. It must be run as root.
+
+### hiveQueries.sql
+
+All the queries (workload + olap + additional hive queries) rewritten to be compatible with Hive.
+
+### HiveSqoopInstall.sh
+
+The script used to install sqoop, the utility used to import the data from postgresql to hive. It must be run as root.
+
+### olapQueries.sql
+
+The collection of olap queries for the project, in pure SQL.
+
+### README.md
+
+The readme of the project, written in markdown.
+
+### README.pdf
+
+The readme of the project, in PDF.
+
+### rolapInit.sh
+
+The script used to create the rolap schema and perform the ETL process.
+
+### rolapPopulate.sql
+
+The file containing the ETL process from postgresql to the rolap datawarehouse.
+
+### rolapSchema.sql
+
+The rolap schema.
+
+### rolapWorkload.sql
+
+The workload rewritten to use the rolap tables.
+
+### sparkQueries.java
+
+All the spark code.
+
+### sparkRun.sh
+
+A script to run all the spark queries on the rolap datawarehouse.
+
+### tableauInit.sh
+
+A script used to make postgresql accessible from the host machine.
