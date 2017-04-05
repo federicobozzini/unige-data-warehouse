@@ -1,5 +1,13 @@
 # dw-project
 
+## 0 - Basic instructions
+
+To run the project docker image go the root folder and run:
+
+    docker-compose up -d
+
+To login on the container use ssh with user "student" and password "foobar" on port 2023.
+
 ## 1 - Operational data sources inspection and profiling
 
 To import the data I wrote the initDb.sh script.
@@ -10,7 +18,7 @@ The script streamlines the database initialization process and solves the follow
 
 - some CSV files contained some empty lines that gave errors when imported by Postgres. The empty lines are therefore removed
 
-- the EOLs of the CVS files were CTRLF. This may be a problem on the linux server. I coverted the EOLS of the files to LF. 
+- the EOLs of the CVS files were CTRLF. This may be a problem on the linux server. I coverted the EOLS of the files to LF.
 
 - the AdventureworksDb.sql file imports the files using the space as a separator, while the values in the CSV files are separated by Tabs. I fixed the sql script. 
 
@@ -527,8 +535,8 @@ Show the ranking of the 5 most selling stores, together with their surplus compa
 
 Show the cumulative total of the revenues of the 3 best selling sales persons
 
-    select y.year, 
-        salesperson, 
+    select y.year,
+        salesperson,
         sum(revenue) as revenue,
         round(sum(sum(revenue)) over (partition by salesperson order by totrevenue desc, year rows unbounded preceding), 2) as totrevenue
     from rolap.salebyyearandcategory s
@@ -551,8 +559,8 @@ Show the cumulative total of the revenues of the 3 best selling sales persons
 
 Show the moving sum of the revenues in the top selling city, recalculated based on the last 4 months
 
-    select d.month, 
-        city, 
+    select d.month,
+        city,
         sum(revenue) as revenue,
         round(sum(sum(revenue)) over (partition by city order by totrevenue desc, d.month rows 3 preceding), 2) as totrevenue
     from rolap.sale s
@@ -786,8 +794,8 @@ Calculate the 3 top selling bike, per year
 
     select year, product, quantitysold
     from (
-        select year, 
-            product, 
+        select year,
+            product,
             rank() over (partition by year order by quantitysold desc) as position,
             quantitysold
         from (
