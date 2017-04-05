@@ -1,1 +1,0 @@
-select distinct a.city, p.stateprovincecode from person.address a left join person.stateprovince p on a.stateprovinceid = p.stateprovinceid where exists (select * from person.address a2 where a.city=a2.city and a.stateprovinceid <> a2.stateprovinceid);
