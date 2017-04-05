@@ -10,7 +10,9 @@ To login on the container use ssh with user "student" and password "foobar" on p
 
 ## 1 - Operational data sources inspection and profiling
 
-To import the data I wrote the initDb.sh script.
+The first step necessary to boostrap the product was to import the data. for this task I wrote the initDb.sh script. To run it use:
+
+    ./initDb.sh
 
 The script streamlines the database initialization process and solves the following error I have encountered:
 
@@ -303,6 +305,8 @@ I added a column 'exid' to some of the data warehouse tables as a reference to t
 
 I renamed some columns for practical reasons. For instance 'from' became 'fromts', 'to' became 'tots' and 'date' became 'datets'. I also renamed the 'date' table to 'datets'.
 
+The SQL used to describe the data warehouse is stored in the rolapSchema.sql
+
 ### Data warehouse data insertion
 
 I decided to program all the ETL process by using exclusevely Postgres.
@@ -316,6 +320,8 @@ I also replaced the null values in the star schemas with fake values. For instan
 Since I wanted to use the city dimension, but there was no city unique identifier in the source db, I decided to encode the cities by using the format *"city-name, state-province"*. I assume this encoding is non-ambiguous.
 
 I also assumed that when no currency was present for a sale, the currency actually used was the USD.
+
+All the ETL process is done via SQL and the relevant code can be found in the rolapPopulate.sql file.
 
 ### Views
 
@@ -340,8 +346,13 @@ The secondary fact of the sales by country can be used to optimize queries q3 an
 
 ![Sale by country](./images/view2Schema.png "Sale by country schema")
 
-## 4 - OLAP Queries
+### Rolap initialization
 
+To initialize the data warehouse just use the rolapInit.sh file.
+
+    ./rolapInit.sh
+
+## 4 - OLAP Queries
 
 ### Query assumptions
 
