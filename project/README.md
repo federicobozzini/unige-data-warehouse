@@ -1175,3 +1175,59 @@ The instructions to achieve this, can be found in the script tableauInit.sh . In
     /home/student/share/project/tableauInit.sh
 
 The connection to the postgres database will be then available on the port 5431 with the student credentials from the host machine.
+
+### Analysis
+
+### q2 - Revenue by categories per year
+
+This first analysis is useful to understand the proportion of sales for every category and the trend along the years.
+
+![Q2 chart](./images/tableauQ2.png "q2 chart")
+
+As it's visible from the chart, the bikes represent the lion's share of the revenue and only the bike components add up a relevant amount. Accessories and clothing can be summarized as very marginal from a revenue perspective.
+
+Another import thing we can observe from th chart is that all the categories follow a very similar trend through the years, so we can exclude any anomalous trend.
+
+### q9 - Stores selling most bikes
+
+This analysis tries to identify the stores able to selling most bikes, in order to allow further analysis to what make a store successful. The first chart included is a simple treemap.
+
+![Q9 chart](./images/tableauQ9.png "q9 chart")
+
+The same data displayed on the world map shows clearly that the overwhelming majority of the stores are in North America, especially USA.
+
+![Q9 map chart](./images/tableauQ9-2.png "q9 map chart")
+
+#### note
+
+The original q9 query has been modified to add the country of each store and to limit the result to 30 rows.
+
+### q10 - Most used shipping method by country
+
+In this analysis I tried to understand whether are present differences among the shipping methods used by the countries around the world.
+
+As learned from the previous analysis, of the 5 shipping methods present in the database, only 2 have actually been used for past orders, so the analysis is focused on those (XRQ TRUCK GROUND and CARGO TRANSPORT 5).
+
+![Q10 map chart](./images/tableauQ10.png "q10 map chart")
+
+From the world map it's pretty clear that CARGO TRANSPORT 5 is the preferred choice in North America and has the upper hand in Europe while it's seldom used in Oceania.
+
+### Q18 - 3 best-selling models of bikes per year
+
+Here is presented a short analysis of the best-selling models of bikes for evey year.
+
+![Q18 chart](./images/tableauQ18.png "q18 chart")
+
+By starting from the results of q2 here there is an attempt to dig deeper in understanding what are the best-selling models of bikes in every year.
+
+Some things that can be noticed is that there is not a bike that is a clear advantange other the other ones, and as a result the best-selling bikes change almost every year. This possibily comunicates that the bike market is quite volatile and it's not possible to rely too much on some products only because they performed well for some years.
+
+### Q20 - Revenue per day of the week
+
+With this chart the intention is to understand how the total revenues changes when group by day of the week of the corresonding sale.
+
+![Q20 chart](./images/tableauQ20.png "q20 chart")
+
+Apparantly Monday and Wednesday are the best-performing day of the week, and Friday the worst one. The weekend features a below average results contrary of what some people may think without having the data.
+
+This information can possibly be exploited in future discounts and promotions.

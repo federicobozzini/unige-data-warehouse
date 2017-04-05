@@ -8,6 +8,7 @@ project/metastore_db/
 project/derby.log
 project/sparkqueries.jar
 project/SparkQueries.class
+project/tableau/~*.twbr
 exercise0SparkSql/sparksql.jar
 exercise0SparkSql/SparkSql.class
 metastore_db/
