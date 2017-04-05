@@ -5,6 +5,7 @@ services:
     container_name: dwws
     ports:
       - "2023:22"
+      - "5431:5432"
     volumes:
       - .:/home/student/share
     restart: always

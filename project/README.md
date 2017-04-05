@@ -1161,3 +1161,17 @@ Show the 4 top selling items for the 4 customers that produced more revenue
     .groupBy("store", "product", "totquantity")
     .agg(rank().over(q23w2).as("product_rank"))
     .filter("product_rank <= 4");
+
+## Tableau
+
+### Tableau configuration
+
+The first thing needed to make Tsableau work on the datawarehouse was to configure the docker container to make the data accessible by the host machine.
+
+The instructions to achieve this, can be found in the script tableauInit.sh . In order to run this script use the commands:
+
+    su - root
+
+    /home/student/share/project/tableauInit.sh
+
+The connection to the postgres database will be then available on the port 5431 with the student credentials from the host machine.
