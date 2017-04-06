@@ -77,7 +77,9 @@ Date is fixed.
 
 ### Workload
 
-I present here a list of logical queries:
+The workload queries can be found in the dbWorkload.sql file.
+
+Here a short summary of the logical queries of the worload is presented:
 
 #### q1
 
@@ -360,7 +362,9 @@ I assume here that the name value of the different dimension attributes is alway
 
 ### The workload
 
-The queries rewritten to use the rolap model:
+The workload queries rewritten to use the rolap model can be found in the file rolapWorkload.sql file.
+
+Here is a short summary of the queries:
 
 #### q1 in the dw
 
@@ -510,6 +514,8 @@ Sale[store, category='Bikes', quantity>=200].quantity
 With the queries involving prices and revenues I noted that small differences betweeen the 2 different versions of the query are possible. This is due to rounding errors on the calculations.
 
 ### Olap Queries
+
+The Olap queries can be found in the file olapQueries.sql .
 
 #### Comparison of detailed and summarized data [window partitioning] - q10
 
@@ -1188,6 +1194,8 @@ The instructions to achieve this, can be found in the script tableauInit.sh . In
 The connection to the postgres database will be then available on the port 5431 with the student credentials from the host machine.
 
 ### Analysis
+
+All the raw Tableau files can be found in the tableau folder.
 
 ### q2 - Revenue by categories per year
 
