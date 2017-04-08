@@ -63,6 +63,14 @@ Here I present an overview of the dimensions of the Sale fact:
 
 Customer and City share the country attribute.
 
+Other interesting attributes not included in the schema for simplicity:
+
+- all the details about product offers
+- customer and salesperson gender
+- details on a date (quarter, dayOfTheWeek)
+- more details not only about the products sold, by about the orders. In other words being able to investigate related sales
+- now if an order was placed online or offline
+
 ##### Dynamicity
 
 Product and its categorization may be dynamic. There may be a change in how a product is classified but this should happen quite unfrequently.
