@@ -24,7 +24,7 @@ The script streamlines the database initialization process and solves the follow
 
 - the AdventureworksDb.sql file imports the files using the space as a separator, while the values in the CSV files are separated by Tabs. I fixed the sql script. 
 
-## 2 - Conceptual design
+## 2 - Data warehouse conceptual design
 
 I decided to analysize one fact: Sales.
 
@@ -598,7 +598,7 @@ Show the moving sum of the revenues in the top selling city, recalculated based 
 
 It does not account for empty months.
 
-## Hive
+## 5 - Hive
 
 ### Hive ETL
 
@@ -831,7 +831,7 @@ Calculate the 3 top selling bike, per year
     where position <= 3
     order by year, quantitysold desc;
 
-## SparkSQL
+## 6 - SparkSQL
 
 All the queries are in the file sparkQueries.java
 
@@ -1179,7 +1179,7 @@ Show the 4 top selling items for the 4 customers that produced more revenue
     .agg(rank().over(q23w2).as("product_rank"))
     .filter("product_rank <= 4");
 
-## Tableau
+## 7 - Tableau
 
 ### Tableau configuration
 
@@ -1250,6 +1250,62 @@ With this chart the intention is to understand how the total revenues changes wh
 Apparantly Monday and Wednesday are the best-performing day of the week, and Friday the worst one. The weekend features a below average results contrary of what some people may think without having the data.
 
 This information can possibly be exploited in future discounts and promotions.
+
+## Time estimates
+
+### 0 - Understanding the text and review the material
+
+Total time required: 2 hours
+
+### 1 - Operational data sources inspection and profiling
+
+This required much more time that what I expected, mainly due to the fact that the data needed for the project were in a non-usable format. I had to fix the data and improve the import process.
+
+Total time required: 14 hours
+
+### 2 - Data warehouse conceptual design
+
+This part required mostly a lot of design and very little coding . I did not create a very complex schema and the time necessary to complete all the parts was what I expected.
+
+Total time required: 12 hours
+
+### 3 - Data warehouse ROLAP logical design
+
+This part was fairly large and required me to decide which approach to use for the logical design and which views to include. Some hands-on approach was also necessary for the ETL process and to write the workload queries in SQL (not required). I had to modify some details in the previous part and this required some additional time.
+
+Total time required: 17 hours
+
+### 4 - OLAP Queries
+
+This part required me just to review the material and rewrite the worload queries and 4 additional OLAP queries.
+
+Total time required: 9 hours.
+
+### 5 - Hive
+
+This part required me to learn how Hive works under the hood, especially for the initial data import. The import process was especially time-consuming and the choice to use Sqoop didn't make the process much easier (problems with the drivers and file system permissions made me lose much time that what I hoped). Rewriting the queries to be compatible with Hive was easy but required some time.
+
+Total time required: 16 hours.
+
+### 6 - SparkSQL
+
+Learning how to use Spark was a much easier task than learning Hive. The documentation is much more complete and easy to consult. Rewriting the queries was again a long task with several small unexpected blockers along the way.
+
+Total time required: 12 hours.
+
+### 7 - Tableau
+
+Tableau looks like a very user-friendly software. The main technical challenge here was to setup the docker image to be accessible by the host machine. Then preparing the analysis and the graphics was a definetely doable.
+
+Total time required: 10 hours.
+
+### Documentation writing and polishing
+
+Total time required: 8 hours.
+
+### Total time estimate
+
+In the end, to complete the project I needed around 102 hours.
 
 ## Short explanation of the files and folders included in the project
 
