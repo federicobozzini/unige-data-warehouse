@@ -1,6 +1,14 @@
 # dw-project
 
-## 0 - Basic instructions
+## 0 - Basic information
+
+### Group
+
+Members of the group: 
+
+- Federico Bozzini, s3169366.
+
+### How to run the project
 
 To run the project docker image go the root folder and run:
 
