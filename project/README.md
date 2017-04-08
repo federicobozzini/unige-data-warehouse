@@ -410,6 +410,8 @@ Sale[date>=18/12/2012 AND date<=25/12/2012, revenue> 200, country='UK'].product
     group by p.exid, p.name
     having sum(s.revenue) >= 1500;
 
+Here it was not the case to fetch the historical product, a today-for-yesterday approach is used.
+
 #### q4 in the dw
 
 The list of all cities where the product 'Mountain-200 Silver, 42' has been sold at least 5 times in the same date in 2013
@@ -428,6 +430,8 @@ Sale[product='Mountain-200 Silver, 42', date, year=2013, quantity>=5].city
     having sum(s.quantity) >= 8
     order by city;
 
+Here it was not the case to fetch the historical product, a today-for-yesterday approach is used.
+
 #### q5 in the dw
 
 The average revenue for all the currencies by year
@@ -443,7 +447,7 @@ Sale[currency, year].revenue
 
 #### q6 in the dw
 
-Quantity of product sent by shipping method for every country
+Quantity of products sent by shipping method for every country
 
 Sale[country, ship-method].quantity
 
@@ -626,7 +630,7 @@ To import the data into hive I created the script hiveInit.sh that uses sqoop. I
 
 ### Workload in Hive
 
-I made thhe queries of the workload work in Hive with only some small tweaks. The most relevant differences I noticed between postgresql and Hive were how dates are managed and the presence of some errors on the floating point operation on Hive. To solve the latter I just decided to round the final results of the calculactions.
+I made the queries of the workload work in Hive with only some small tweaks. The most relevant differences I noticed between postgresql and Hive were how dates are managed and the presence of some errors on the floating point operation on Hive. To solve the latter I just decided to round the final results of the calculactions.
 
 The Hive queries are not reported here since they are very similar to the original ones. They can be found in the hiveQueries.sql file.
 
@@ -830,6 +834,9 @@ Calculate the 3 top selling bike, per year
     ) tmp
     where position <= 3
     order by year, quantitysold desc;
+
+
+Here it was not the case to fetch the historical product, a today-for-yesterday approach is used.
 
 ## 6 - SparkSQL
 
