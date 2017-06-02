@@ -18,7 +18,6 @@ The Workers of the the harbour Enterprise presented in the initial model (in the
 - Agents
 - Customs
 - Customs Clearance Agents (CCA)
-- Deliverers
 - Finance Police
 - Deliverers
 - Delivery Services
@@ -102,7 +101,9 @@ The first thing we noticed was the lack of the necessary high level view of the 
 
 ### Goals
 
-We thought that the main goal of the system was to "To make as many shipments as possible by following the correct procedures". This can be divided in two subgoals, "To make as many shipments as possible" and "To ensure that the correct procedures are followed".
+We thought that the main goal (G) of the system was to "To make as many shipments as possible by following the correct procedures". This can be divided in 3 subgoals, "To make the necessary Delivery Order by following the correct procedures" (G1),  and "To setup the necessary leave authorizations and permissions for the shipment" (G2) and "To carry out the shipment by following the correct procedures" (G3).
+
+These subgoals can be further divided. G1 may be divided in "To create and send the Delivery Orders" (G1.1) and "To Ensure that the correct procedures are followed for the Delivery Orders" (G1.2). G3 can be divided in "To carry out the shpiments" (G3.1) and "To ensure that the correct procedures are followed when the shipments are completed" (G3.2).
 
 
 
