@@ -70,30 +70,30 @@ The Import Process may be modelled as a Business Process. We will present a high
 
 An Agent starts the Import Process by generating an ENS (*ENS generation*), then the ENS is submitted to the Customs (*ENS submission*) that generates the MRNs (*MRNs generation*) and consigns the MRNs to the Agent (*MRNs consignement*).
 
-The Agent generates a Policy (*Policy generation*) used to generate an MMA (*MMA generation*) that is then submitted to the Customs (*MMA submission*) that in turns generates the A3s (*A3s generation*) and consigns the A3s to an Agent (*A3s consignement*).
+After this the Agent generates a Policy (*Policy generation*) that uses to generate an MMA (*MMA generation*) that is then submitted to the Customs (*MMA submission*). The customs generates the A3s (*A3s generation*) and consigns the A3s to the Agent (*A3s consignement*).
 
-After this an Agent chooses a Customs Clerance Agent (*Customs Clearance Agent Choice*) and appoints him (*Appointment*).
+After this, an Agent chooses a Customs Clearance Agent (*Customs Clearance Agent Choice*) and appoints him (*Appointment*).
 
-After this, 3 parallel processes starts.
+After this, 3 parallel processes start.
 
-The first one is carried out by an Agent generates a Delivery Order (*Delivery Order generation*) and consigns the Delivery Order to the Customs Clerance Agent (*Delivery Order Consignment*).
+The first one is carried out by an Agent that generates a Delivery Order (*Delivery Order generation*) and consigns the Delivery Order to the Customs Clearance Agent (*Delivery Order Consignment*).
 
 The second parallel task is carried out by the Customs Clearance Agent that generates a Customs Declaration (*Customs Declaration generation*) and consigns it to the Customs.
 The Customs may refuse to give Clearance (*Clearance Refused*) or generate a Clearance Code (*Clear Code generation*) and give Clearance (*Clearance OK*) to the Customs Clearance Agent.
 
 The third parallel task is carried out by the Customs Clearance Agent that asks to the Terminal to book a Pickup (*Pickup booking*). The Terminal may refuse (*Pickup refusal*) or agree to book a Pickup (*Pickup OK*).
 
-When the three parallel process are all finished, the Customs Clearance Agent chooses a Delivery Service (*Delivery Service choice*), generates a WayBill (*Waybill generation*) and makes a Shipment Request to a Terminal (*Shipment Request*). The Terminal may refuse the Shipment (*Shipment refusal*) or make a Transport Request to the Delivery Services(*Transport Request*). In this case the Delivery Service and the Deliverer may refuse the Transport (*Transport Refusal*).
+When the three parallel processes are all finished, the Customs Clearance Agent chooses a Delivery Service (*Delivery Service choice*), generates a WayBill (*Waybill generation*) and makes a Shipment Request to the Delivery Service (*Shipment Request*). The Delivery Service may refuse the Shipment (*Shipment refusal*) or make a Transport Request to the Deliverer (*Transport Request*). The Deliverer may refuse the Transport (*Transport Refusal*).
 
-If they tell the Terminal they are okay with the Transport Request (*Transport OK*) than the Terminal authorize the Shipment to a Customs Clearance Agent (*Shipment OK*). The CCA consigns the Leave Documentation (*Leave Documentation consignment*, were was the Leave Documentation generated?) to the Gate that can both reject the request (*Leave refusal*) or accept it (*Leave OK*). In this last case, the CCA books the Leave (*LEAVE booking*). The Gate and the Deliverer check if there is availability (*Availability Checking*). If not they reject the request (*Booking refusal*), otherwise the give their ok (*Booking OK*).
+If the Deliverer tells the Delivery Service to agree with the transport request (*Transport OK*) than the Delivery Service gives its okay to the Customs Clearance Agent (*Shipment OK*). The CCA consigns the Leave Documentation (*Leave Documentation consignment*, were was the Leave Documentation generated?) to the Gate that can both reject the request (*Leave refusal*) or accept it (*Leave OK*). In this last case, the CCA books the Leave (*Leave booking*). The Gate checks if there is availability (*Availability Checking*). If not, it hey rejects the request (*Booking refusal*), otherwise it gives its ok (*Booking OK*).
 
-After this, 2 parallel processes starts.
+After this, 2 parallel processes start.
 
-The first process starts with the Deliverer asking access to a Terminal (*Access request*). The Terminal may refuse (*GateIn refusal*) or accept (*GateIn OK*). In this case the Deliver enters the Terminal (*Terminal entering*) and it's unloaded by the Terminal (*Truck unloading*).
+The first process starts with the Deliverer asking access to the Terminal (*Access request*). The Terminal may refuse (*GateIn refusal*) or accept (*GateIn OK*). In this case the Deliverer enters the Terminal (*Terminal entering*) and it's loaded by the Terminal (*Truck loading*).
 
 The second parallel task is started by the Gate asking to the Finance Police a Leave Permission (*Leave Permission request*) that may be rejected (*Leave Permission refusal*) or accepted (*Leave Permission OK*). In this case the Leave Permission is consigned to the Gate and the Deliverer (*Leave Permission consignment*).
 
-When both these 2 tasks have been completed the Deliverer receives an OK to leave the Terminal (*GateOut OK*) and exits the Terminal (*Terminal exiting*).
+When both these 2 tasks have been completed and the Deliverer receives an OK to leave the Terminal (*GateOut OK*) it exits the Terminal (*Terminal exiting*) and the Import Process is completed.
 
 ## Errors, problems, unclear points
 
