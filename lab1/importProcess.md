@@ -50,7 +50,7 @@ The Business Objects of the Enterprise presented in the initial model (in the St
 We found some more Business Objects were necessary for the Import Process:
 
 - MRNs (Movement Reference Number)
-- DD
+- DD (Date)
 
 ## Goals
 
@@ -68,9 +68,9 @@ The Import Process may be modelled as a Business Process. We will present a high
 
 ## The Import Process
 
-An Agent starts by generating an ENS (*ENS generation*), then the ENS is submitted to the Customs (*ENS submission*) that generates the MRNs (*MRNs generation*) and consigns the MRNs to an Agent (*MRNs consignement*).
+An Agent starts the Import Process by generating an ENS (*ENS generation*), then the ENS is submitted to the Customs (*ENS submission*) that generates the MRNs (*MRNs generation*) and consigns the MRNs to the Agent (*MRNs consignement*).
 
-An Agent generates a Policy (*Policy generation*) used to generate an MMA (*MMA generation*) that is then submitted to the Customs (*MMA submission*) that in turns generates the A3s (*A3s generation*) and consigns the A3s to an Agent (*A3s consignement*).
+The Agent generates a Policy (*Policy generation*) used to generate an MMA (*MMA generation*) that is then submitted to the Customs (*MMA submission*) that in turns generates the A3s (*A3s generation*) and consigns the A3s to an Agent (*A3s consignement*).
 
 After this an Agent chooses a Customs Clerance Agent (*Customs Clearance Agent Choice*) and appoints him (*Appointment*).
 
@@ -81,7 +81,7 @@ The first one is carried out by an Agent generates a Delivery Order (*Delivery O
 The second parallel task is carried out by the Customs Clearance Agent that generates a Customs Declaration (*Customs Declaration generation*) and consigns it to the Customs.
 The Customs may refuse to give Clearance (*Clearance Refused*) or generate a Clearance Code (*Clear Code generation*) and give Clearance (*Clearance OK*) to the Customs Clearance Agent.
 
-The third parallel task is carried out by the Customs Clearance Agent that asks to the Terminal to book a Pickup (*Pickup booking*, this operation returns a DD in the initial model, it should be a Deliverer, a D). The Terminal may refuse (*Pickup refusal*) or agree to book a Pickup (*Pickup OK*).
+The third parallel task is carried out by the Customs Clearance Agent that asks to the Terminal to book a Pickup (*Pickup booking*). The Terminal may refuse (*Pickup refusal*) or agree to book a Pickup (*Pickup OK*).
 
 When the three parallel process are all finished, the Customs Clearance Agent chooses a Delivery Service (*Delivery Service choice*), generates a WayBill (*Waybill generation*) and makes a Shipment Request to a Terminal (*Shipment Request*). The Terminal may refuse the Shipment (*Shipment refusal*) or make a Transport Request to the Delivery Services(*Transport Request*). In this case the Delivery Service and the Deliverer may refuse the Transport (*Transport Refusal*).
 
@@ -103,7 +103,35 @@ The first thing we noticed was the lack of the necessary high level view of the 
 
 We thought that the main goal (G) of the system was to "To make as many shipments as possible by following the correct procedures". This can be divided in 3 subgoals, "To make the necessary Delivery Order by following the correct procedures" (G1),  and "To setup the necessary leave authorizations and permissions for the shipment" (G2) and "To carry out the shipment by following the correct procedures" (G3).
 
-These subgoals can be further divided. G1 may be divided in "To create and send the Delivery Orders" (G1.1) and "To Ensure that the correct procedures are followed for the Delivery Orders" (G1.2). G3 can be divided in "To carry out the shpiments" (G3.1) and "To ensure that the correct procedures are followed when the shipments are completed" (G3.2).
+### Business Processes
+
+#### Business overview
+
+The Business overview was not provided and we had to add it by ourselves.
+
+We used the goals established in the previous step. For everyone of the subgoals G1, G2 and G3 we created a Business Process. For the goal G1 we create a Process "Generate and Send a Delivery Order" (P1), for the goal G2 we created a Process "Generate the necessary leave authorizations and permissions" (P2) and for the goal G3 we create the process "Perform the shipment and truck loading" (P3).
+
+The process P1 requires as **Participants** an Agent, the Customs and a Customs Clearance Agent and produces a Delivery Order.
+
+The process P2 requires as **Participants** the Customs and a Customs Clearance Agent, a Delivery Service, a Gate, a Terminal and a Deliverer.
+
+The process P3 requires as **Participants** a Gate, a Terminal, a Deliverer and the Finance Police.
+
+#### Inconsistensies in the views
+
+In the "Agent static and Behaviour" the operation Custom.sendEns(ENS) that is called, does not exist. It should be Custom.eNS(ENS).
+
+In the "Finance Police static and behavior" we needed to add the requestLeavePermission operation.
+
+In the "Process import task" view (with the swimlanes) we had to rearrange the task in the correct swimlanes. We adopted the convention that the task had to be put under the swinlanes of the worker executing the task and had to point to the worker executing the task.
+
+#### Errors
+
+The behaviour view of the Customs Clearange Agent didn't make explicit that some activieties happened cuncurrently. We rewrote it to make it clear.
+
+
+
+
 
 
 
