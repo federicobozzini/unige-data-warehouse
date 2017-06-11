@@ -86,7 +86,7 @@ The third parallel task is carried out by the Customs Clearance Agent that asks 
 
 When the three parallel processes are all finished, the Customs Clearance Agent chooses a Delivery Service (*Delivery Service choice*), generates a WayBill (*Waybill generation*) and makes a Shipment Request to the Delivery Service (*Shipment Request*). The Delivery Service may refuse the Shipment (*Shipment refusal*) or make a Transport Request to the Deliverer (*Transport Request*). The Deliverer may refuse the Transport (*Transport Refusal*).
 
-If the Deliverer tells the Delivery Service to agree with the transport request (*Transport OK*) than the Delivery Service gives its okay to the Customs Clearance Agent (*Shipment OK*). The CCA consigns the leave documentation (*Leave Documentation consignment*) to the Gate that can both reject the request (*Leave refusal*) or accept it (*Leave OK*). In this last case, the CCA books the Leave (*Leave booking*). The Gate checks if there is availability (*Availability Checking*). If not, it hey rejects the request (*Booking refusal*), otherwise it gives its ok (*Booking OK*).
+If the Deliverer tells the Delivery Service to agree with the transport request (*Transport OK*) than the Delivery Service gives its okay to the Customs Clearance Agent (*Shipment OK*). The CCA consigns the leave documentation (*Leave Documentation consignment*) to the Gate that can both reject the request (*Leave refusal*) or accept it (*Leave OK*). In this last case, the CCA books the Leave (*Leave booking*). The Gate checks if there is availability (*Availability Checking*). If not, it rejects the request (*Booking refusal*), otherwise it gives its ok (*Booking OK*).
 
 After this, 2 parallel processes start.
 
@@ -107,6 +107,8 @@ We checked the constintency of the Business Entities and we found some minor err
 In the "Agent static and Behaviour" the operation Custom.sendEns(ENS) that is called, does not exist. It should be Custom.eNS(ENS).
 
 In the "Finance Police static and behavior" we needed to add the requestLeavePermission operation.
+
+In the "Deliverer static and behavior" it was not clear that the Deliverer for waiting for the "Booking OK" event to request access to the Terminal. We made this explicit in the view.
 
 At one point the Agent and the Terminal are Participants of the task "Leave Documentation Consignment"). It was not initially clear for us that the Leave Documentation refers to the Delivery Order, Waybill, 
  and Customs Declaration all together.
@@ -146,12 +148,3 @@ In the "Process import task" view (with the swimlanes) we had to rearrange the t
 #### Errors in other Views
 
 The behaviour view of the Customs Clearange Agent didn't make explicit that some activieties happened cuncurrently. We rewrote it to make it clear.
-
-
-
-
-
-
-
-
-
