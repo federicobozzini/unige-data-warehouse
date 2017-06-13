@@ -10,7 +10,9 @@ Something else that is easier with BPMN is to see when a conditional is evaluate
 
 It is also easier to describe the private Business Processes, or at least the notation is more uniform.
 
-By using the choreography diagram it's easier with BPMN to get a even higher-level view of the communications happening in the process. 
+By using the Conversation diagram it's easier with BPMN to get a even higher-level view of the communications happening in the process.
+
+Other things that may be really helpful in describing a Business Process are the Transactions and Call Activity Tasks. The first one is not easy to replicate with UML while the second offers an interesting possibility to encapsulate some grouped tasks.
 
 ## What BPMN cannot do
 
